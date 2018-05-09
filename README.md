@@ -9,6 +9,7 @@ node: v9.11.1
 npm: 5.6.0
 ```
 
-When you install additional pip module, you must add it to `requirements.txt`. Use this command.
+Pip modules can be handled via requirements.txt
+*When you install additional module*: `pip freeze > requirements.txt`
 
-`pip freeze > requirements.txt`
+*When you want to install modules someone added*: `pip install -r requirements.txt`
