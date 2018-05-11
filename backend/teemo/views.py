@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from rest_framework.response import Response
 from rest_framework import status
 
+# [TODO] CustomerSignUp must not be seen.
 class CustomerSignUp(generics.CreateAPIView):
     """
     Create new Customer
@@ -20,10 +21,11 @@ class CustomerSignUp(generics.CreateAPIView):
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        # [DEBUG] check wrong form 
+        # [TODO] check wrong form 
         self.perform_create(serializer)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
+# [TODO] StoreSignUp must not be seen.
 class StoreSignUp(generics.CreateAPIView):
     """
     List all Store, or Create new Store
@@ -39,6 +41,6 @@ class StoreSignUp(generics.CreateAPIView):
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        # [DEBUG] check wrong form 
+        # [TODO] check wrong form 
         self.perform_create(serializer)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
