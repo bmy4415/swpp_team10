@@ -3,16 +3,17 @@ from teemo.models import Customer, Store, Coupon, Has_coupon
 
 class CustomerSerializer(serializers.ModelSerializer):
     account = serializers.CharField(source='user.username')
-
+    password = serializers.CharField(source='user.password')
     class Meta:
         model = Customer
-        fields = ('id', 'account', 'phone_number')
+        fields = ('id', 'account', 'password', 'phone_number')
 
 class StoreSerializer(serializers.ModelSerializer):
     account = serializers.CharField(source='user.username')
+    password = serializers.CharField(source='user.password')
     class Meta:
         model = Store
-        fields = ('id', 'account', 'phone_number', 'address', 'name')
+        fields = ('id', 'account', 'password', 'phone_number', 'address', 'name')
 
 '''
 class SnippetSerializer(serializers.Serializer):
