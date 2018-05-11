@@ -8,18 +8,14 @@ const Wrapper = styled.div`
   color: ${palette('grayscale', 0)};
 `
 
-const LoginPanel = ({ statefunction, onSignin, onCustomerSignup, onStoreSignup }) => {
+const LoginPanel = ({ statefunction, onSignin }) => {
   let input_username;
   let input_password;
 
   const onSigninPost = () => {
     onSignin(input_username.value, input_password.value);
-  };
-  const onStoreSignupPost = () => {
-    onStoreSignup()
-  };
-  const onCustomerSignupPost = () => {
-    onCustomerSignup()
+    input_username.value = '';
+    input_password.value = '';
   };
 
   return (
@@ -29,9 +25,11 @@ const LoginPanel = ({ statefunction, onSignin, onCustomerSignup, onStoreSignup }
       <ul><input ref={node => {input_username = node;}} /></ul>
       <li>password</li>
       <ul><input ref={node => {input_password = node;}} /></ul>
-      <Button onClick={onSigninPost}>Sign in</Button>
-      <Button onClick={onCustomerSignupPost}>Sign up (Customer)</Button>
-      <Button onClick={onStoreSignupPost}>Sign up (Store)</Button>
+      <button onClick={onSigninPost}>Sign in</button>
+      <br/>
+      <a href='http://www.hyperlinkcode.com/button-links.php'><button>Sign up (Customer)</button></a>
+      <br/>
+      <a href='http://www.hyperlinkcode.com/button-links.php'><button>Sign up (Store)</button></a>
     </div>
   )
 }

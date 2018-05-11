@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
 import LoginPanel from '../components/molecules/LoginPanel'
-//import actions
+import { signin } from '../store/teemo/actions'
 
 const mapStateToProps = (state) => {
     return {
@@ -10,10 +10,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        //TODO: give actions for params of dispatch
-        onSignup: () => dispatch(),
-        onSigninCustomer: () => dispatch(),
-        onSigninStore: () => dispatch()
+        onSignin: (username, password) => dispatch(signin(username, password))
     }
 }
-export default connent(mapStateToProps, mapDispatchToProps)(LoginPanel)
+export default connect(mapStateToProps, mapDispatchToProps)(LoginPanel)
