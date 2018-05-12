@@ -11,25 +11,23 @@ class App extends Component {
                     <Grid.Row centered>
                         <Grid.Column width={6}>
 							<h2>Sign up customer</h2>
-                            <Form>
+                            <Form action="/api/customer_sign_up/" method="post">
                                 <Form.Field>
-                                    <Form.Input label="Account" placeholder="honggildong"/>
+                                    <Form.Input label="Account" name="account" placeholder="honggildong"/>
                                 </Form.Field>
                                 <Form.Field>
-                                    <Form.Input label="Password" placeholder="Your password" />
+                                    <Form.Input type="password" label="Password" name="password" placeholder="Your password" />
                                 </Form.Field>
                                 <Form.Field>
-                                    <Form.Input label="Password Check" placeholder="Your password again"/>
+                                    <Form.Input type="password" label="Password Check" name="password_check" placeholder="Your password again"/>
                                 </Form.Field>
                                 <Form.Field>
-                                    <Form.Input label="Phone Number" placeholder="01012345678" />
+                                    <Form.Input label="Phone Number" name="phone_number" placeholder="01012345678" />
                                 </Form.Field>
+								<Button type="submit" content={"Sign up"}/>
                             </Form>
 							
-							<br/>
 
-                            <Button content={"Sign up"}/>
-                            <br/>
                         </Grid.Column>
                     </Grid.Row>
                     </Grid>
