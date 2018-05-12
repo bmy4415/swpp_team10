@@ -20,8 +20,8 @@ from django.conf.urls import url, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('auth/', include('auth.urls')),
-    url(r'^', include('teemo.urls')),
+    path('api/', include('api.urls')),
+    #path('pages/', include('pages.urls')),
     url(r'^api-auth/', include('rest_framework.urls')),
 ]
 

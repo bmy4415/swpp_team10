@@ -1,9 +1,32 @@
-from teemo.models import Customer, Store, Coupon, Has_coupon
-from teemo.serializers import CustomerSerializer,StoreSerializer
+from api.models import Customer, Store, Coupon, Has_coupon
+from api.serializers import CustomerSerializer,StoreSerializer
 from rest_framework import generics
 from django.contrib.auth.models import User
 from rest_framework.response import Response
 from rest_framework import status
+
+from django.shortcuts import render
+from django.contrib.auth.views import *
+from django.views.generic.base import TemplateView
+# Create your views here.
+
+class MyLoginView(LoginView):
+    def get_success_url(self):
+        url = self.get_redirect_url()
+        """
+	    if request.user.isCustomer:
+		    LOGIN_REDIRECT_URL = ''
+	    else:
+		    LOGIN_REDIRECT_URL = ''
+        """
+        LOGIN_REDIRECT_URL = '/api/success_page'
+        return url or resolve_url(LOGIN_REDIRECT_URL)
+
+class MyLogoutView(LogoutView):
+    next_page = '/api/login'
+
+SuccessView = TemplateView
+
 
 # [TODO] CustomerSignUp must not be seen.
 class CustomerSignUp(generics.CreateAPIView):
