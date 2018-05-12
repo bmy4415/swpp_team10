@@ -19,11 +19,11 @@ class MyLoginView(LoginView):
 	    else:
 		    LOGIN_REDIRECT_URL = ''
         """
-        LOGIN_REDIRECT_URL = '/api/success_page'
+        LOGIN_REDIRECT_URL = '/'
         return url or resolve_url(LOGIN_REDIRECT_URL)
 
 class MyLogoutView(LogoutView):
-    next_page = '/api/login'
+    next_page = '/'
 
 SuccessView = TemplateView
 
@@ -47,7 +47,7 @@ class CustomerSignUp(generics.CreateAPIView):
         # [TODO] check wrong form 
         self.perform_create(serializer)
         #return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return redirect('')
+        return redirect('/')
 
 # [TODO] StoreSignUp must not be seen.
 class StoreSignUp(generics.CreateAPIView):
@@ -68,4 +68,4 @@ class StoreSignUp(generics.CreateAPIView):
         # [TODO] check wrong form 
         self.perform_create(serializer)
         #return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return redirect('')
+        return redirect('/')
