@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from teemo.models import Customer, Store, Coupon, Has_coupon
+from api.models import Customer, Store, Coupon, Has_coupon
 
 class CustomerSerializer(serializers.ModelSerializer):
     account = serializers.CharField(source='user.username')
