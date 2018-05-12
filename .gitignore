@@ -171,6 +171,7 @@ venv.bak/
 
 # End of https://www.gitignore.io/api/python,pycharm
 
+db.sqlite3 # sqlite db file
 
 
 

@@ -10,10 +10,13 @@ class App extends Component {
 					<Grid>
 					<Grid.Row centered>
 						<Grid.Column width={6}>
+							<h2>Teemo</h2>
+							
 							<Form action="/api/login/" method="post">
-                             <DjangoCSRFToken/>
+              <DjangoCSRFToken/>
 								<Form.Field>
-									<Form.Input label="Account" placeholder="01012345678" align="center" name="username"/>
+									<Form.Input label="Account" placeholder="honggildong OR 01012345678" name="username"/>
+
 								</Form.Field>
 								<Form.Field>
 									<Form.Input label="Password" placeholder="Your password" name="password"/>
@@ -21,6 +24,7 @@ class App extends Component {
 
 							<Button type='submit' content={"Sign in"}/>
 							</Form>
+							<br/>
 							<br/>
 							<a href='signup_customer'><Button content="Sign up(customer)"/></a>
 							<a href='signup_store'><Button content="Sign up(store)"/></a>
