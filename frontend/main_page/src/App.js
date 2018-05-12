@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Form, Button, Grid, Container } from "semantic-ui-react";
-
+import DjangoCSRFToken from 'django-react-csrftoken';
 
 class App extends Component {
 	render() {
@@ -11,16 +11,19 @@ class App extends Component {
 					<Grid.Row centered>
 						<Grid.Column width={6}>
 							<h2>Teemo</h2>
-							<Form>
+							
+							<Form action="/api/login/" method="post">
+              <DjangoCSRFToken/>
 								<Form.Field>
-									<Form.Input label="Account" placeholder="honggildong OR 01012345678"/>
+									<Form.Input label="Account" placeholder="honggildong OR 01012345678" name="username"/>
+
 								</Form.Field>
 								<Form.Field>
-									<Form.Input label="Password" placeholder="Your password" />
+									<Form.Input label="Password" placeholder="Your password" name="password"/>
 								</Form.Field>
+
+							<Button type='submit' content={"Sign in"}/>
 							</Form>
-							<br/>
-							<Button content={"Sign in"}/>
 							<br/>
 							<br/>
 							<a href='signup_customer'><Button content="Sign up(customer)"/></a>
@@ -33,5 +36,6 @@ class App extends Component {
 		);
 	}
 }
+
 
 export default App;
