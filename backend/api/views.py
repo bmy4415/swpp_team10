@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from rest_framework.response import Response
 from rest_framework import status
 
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth.views import *
 from django.views.generic.base import TemplateView
 # Create your views here.
@@ -46,7 +46,8 @@ class CustomerSignUp(generics.CreateAPIView):
         serializer.is_valid(raise_exception=True)
         # [TODO] check wrong form 
         self.perform_create(serializer)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        #return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return redirect('')
 
 # [TODO] StoreSignUp must not be seen.
 class StoreSignUp(generics.CreateAPIView):
@@ -66,4 +67,5 @@ class StoreSignUp(generics.CreateAPIView):
         serializer.is_valid(raise_exception=True)
         # [TODO] check wrong form 
         self.perform_create(serializer)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        #return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return redirect('')
