@@ -10,15 +10,18 @@ class App extends Component {
 					<Grid>
 					<Grid.Row centered>
 						<Grid.Column width={6}>
+							<h2>Teemo</h2>
 							<Form>
 								<Form.Field>
-									<Form.Input label="Account" placeholder="01012345678" align="center"/>
+									<Form.Input label="Account" placeholder="honggildong OR 01012345678"/>
 								</Form.Field>
 								<Form.Field>
 									<Form.Input label="Password" placeholder="Your password" />
 								</Form.Field>
 							</Form>
+							<br/>
 							<Button content={"Sign in"}/>
+							<br/>
 							<br/>
 							<a href='signup_customer'><Button content="Sign up(customer)"/></a>
 							<a href='signup_store'><Button content="Sign up(store)"/></a>
