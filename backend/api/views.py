@@ -19,7 +19,7 @@ class MyLoginView(LoginView):
 	    else:
 		    LOGIN_REDIRECT_URL = ''
         """
-        LOGIN_REDIRECT_URL = '/'
+        LOGIN_REDIRECT_URL = '/api/success_page/'
         return url or resolve_url(LOGIN_REDIRECT_URL)
 
 class MyLogoutView(LogoutView):
