@@ -8,6 +8,8 @@ from rest_framework import status
 from django.shortcuts import render, redirect
 from django.contrib.auth.views import *
 from django.views.generic.base import TemplateView
+
+from django.db import IntegrityError
 # Create your views here.
 
 class MyLoginView(LoginView):
@@ -45,7 +47,10 @@ class CustomerSignUp(generics.CreateAPIView):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         # [TODO] check wrong form 
-        self.perform_create(serializer)
+        try:
+            self.perform_create(serializer)
+        except IntegrityError:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         #return Response(serializer.data, status=status.HTTP_201_CREATED)
         return redirect('/')
 
@@ -66,6 +71,9 @@ class StoreSignUp(generics.CreateAPIView):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         # [TODO] check wrong form 
-        self.perform_create(serializer)
+        try:
+            self.perform_create(serializer)
+        except IntegrityError:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         #return Response(serializer.data, status=status.HTTP_201_CREATED)
         return redirect('/')
