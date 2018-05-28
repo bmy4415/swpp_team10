@@ -16,3 +16,9 @@ urlpatterns += [
     url(r'^customer_sign_up/$', views.CustomerSignUp.as_view()),
     url(r'^store_sign_up/$', views.StoreSignUp.as_view()),
 ]
+
+# urls for coupon
+urlpatterns += [
+    url(r'^coupons/$', views.CouponList.as_view()),
+    url(r'^coupons_detail/(?P<pk>[0-9]+)/$', views.CouponDetail.as_view()),
+]

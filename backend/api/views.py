@@ -1,5 +1,5 @@
-from api.models import Customer, Store, Coupon, Has_coupon
-from api.serializers import CustomerSerializer,StoreSerializer
+from api.models import Customer, Store, Coupon
+from api.serializers import CustomerSerializer,StoreSerializer, CouponSerializer
 from rest_framework import generics
 from django.contrib.auth.models import User
 from rest_framework.response import Response
@@ -77,3 +77,11 @@ class StoreSignUp(generics.CreateAPIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         #return Response(serializer.data, status=status.HTTP_201_CREATED)
         return redirect('/')
+
+class CouponList(generics.ListCreateAPIView):
+    queryset = Coupon.objects.all()
+    serializer_class = CouponSerializer
+
+class CouponDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Coupon.objects.all()
+    serializer_class = CouponSerializer
