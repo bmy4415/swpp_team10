@@ -54,7 +54,8 @@ class SignUpStorePage extends Component {
     } 
 
 	render() {
-		  if(this.props.statefunction.isLoggedIn)
+
+		  if(this.props.statefunction.loggedInUserType === 'customer')
 		  {
 			  if(this.props.statefunction.isCustomer)
 				  return <Redirect to="/Customer"/>

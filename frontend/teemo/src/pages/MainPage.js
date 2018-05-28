@@ -6,6 +6,7 @@ class MainPage extends Component {
 	state = {
 		id:'',
 		password:'',
+		userType:'store', // for debug
 	}
 
 	onSubmitLogin = /*async*/ ((event) => {
@@ -20,7 +21,9 @@ class MainPage extends Component {
 		 *		this.setState({id:'', password:'',});
 		 * }
 		 */
-		}) 
+		this.props.onLoginPassed(this.state.id, this.state.userType);// arguments should be replaced according to response
+		console.log(this.props.statefunction);
+		})
 	
 
     captureId = (event) => {
@@ -36,7 +39,7 @@ class MainPage extends Component {
 	render() {
 		  if(this.props.statefunction.isLoggedIn)
 		  {
-			  if(this.props.statefunction.isCustomer)
+			  if(this.props.statefunction.loggedInUserType === 'customer')
 				  return <Redirect to="/Customer"/>
 			  else
 				  return <Redirect to="/Store"/>
@@ -48,14 +51,14 @@ class MainPage extends Component {
 						<Grid.Row centered>
 							<Grid.Column width={6}>
 								<h2>Teemo</h2>
-								<Form>
+								<Form onSubmit={this.onSubmitLogin} >
 									<Form.Field>
 										<Form.Input type="text" onChange = {this.captureId} value={this.state.id} label="Account" placeholder="honggildong OR 01012345678"/>
 									</Form.Field>
 									<Form.Field>
 										<Form.Input type="password" onChange = {this.capturePassword} value={this.state.password} label="Password" placeholder="Your password"/>
 									</Form.Field>
-									<Button type='submit' onSubmit={this.onSubmitLogin} content={"Sign in"}/>
+									<Form.Button type='submit' content={"Sign in"}/>
 								</Form>
 								<br/>
 								<br/>
