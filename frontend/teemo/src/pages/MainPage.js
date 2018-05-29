@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Form, Button, Grid, Container } from 'semantic-ui-react';
 import { Redirect, Link } from 'react-router-dom';
+import cookie from 'react-cookies';
 
 class MainPage extends Component {
 	state = {
@@ -9,19 +10,21 @@ class MainPage extends Component {
 		userType:'store', // for debug
 	}
 
-	onSubmitLogin = /*async*/ ((event) => {
+	onSubmitLogin = ((event) => {
 		event.preventDefault();
 
-		fetch("https://localhost:8000", {
+		fetch("http://localhost:8000/api/login/", {
 			method: 'POST',
 			headers: {
 				'Accept' : 'application/json',
 				'Content-Type' : 'application/json',
+				'X-CSRFToken' : cookie.load('csrftoken'),
 			},
 			body: JSON.stringify({
 				username: this.state.id,
 				password: this.state.password,
-			})
+			}),
+			credentials: 'include',
 		}).then((response) => {
 			console.log(response);
 			if(response.ok)

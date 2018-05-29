@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import './App.css';
-import DjangoCSRFToken from 'django-react-csrftoken';
 import { Route, Switch } from 'react-router-dom';
 import MainPage from './containers/MainPage.js';
 import SignUpCustomerPage from './containers/SignUpCustomerPage.js';
@@ -28,7 +27,6 @@ class App extends Component {
     return (
         <div className="App">
 			<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.12/semantic.min.css"></link>
-			<DjangoCSRFToken/>
 			<Routing/>
         </div>
     );

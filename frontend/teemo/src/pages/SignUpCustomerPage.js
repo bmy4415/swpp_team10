@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Form, Button, Grid, Container } from 'semantic-ui-react'
 import { Redirect } from 'react-router-dom'
+import cookie from 'react-cookies';
 
 class SignUpCustomerPage extends Component {
 	state = {
@@ -11,19 +12,37 @@ class SignUpCustomerPage extends Component {
 		message:'',
 	}
 
-	onSubmitSignUp = /*async*/ ((event) => {
+	onSubmitSignUp = ((event) => {
 		event.preventDefault();
-		/*await axios.fetch(...).then((err, result) => {
-		 * if(passed) 
-		 * {
-		 *		redirect to mainpage
-		 * }
-		 * else
-		 * {
-		 *		this.setState({message: "duplicate ID ..etc"});
-		 * }
-		 */
-		}) 
+		// TODO: need check password logic!
+		fetch("http://localhost:8000/api/customer_sign_up/", {
+			method: 'POST',
+			headers: {
+				'Accept' : 'application/json',
+				'Content-Type' : 'application/json',
+				'X-CSRFToken' : cookie.load('csrftoken'),
+			},
+			body: JSON.stringify({
+				account: this.state.id,
+				password: this.state.password,
+				phone_number: this.state.phoneNumber,
+			}),
+			credentials: 'include',
+		}).then((response) => {
+			console.log(response);
+			if(response.ok)
+			{
+				console.log(this.props.statefunction);
+				this.props.history.push("/");
+			}
+			else
+			{
+				throw Error(response.statusText);
+			}
+		}).catch((err) => {
+			console.log(err);
+		})
+	}) 
 	
 
     captureId = (event) => {
@@ -58,7 +77,7 @@ class SignUpCustomerPage extends Component {
 						<Grid.Row centered>
 							<Grid.Column width={6}>
 								<h2>Sign up customer</h2>
-								<Form>
+								<Form onSubmit={this.onSubmitSignUp}>
 									<Form.Field>
 										<Form.Input type="text" onChange = {this.captureId} value={this.state.id} label="Account" placeholder="honggildong"/>
 									</Form.Field>
@@ -71,7 +90,7 @@ class SignUpCustomerPage extends Component {
 									<Form.Field>
 										<Form.Input type="text" onChange = {this.capturePhoneNumber} value={this.state.phoneNumber} label="Phone Number" placeholder="01012345678"/>
 									</Form.Field>
-									<Button type='submit'onSubmit={this.onSubmitSignUp} content={"Sign in"}/>
+									<Button type='submit' content={"Sign up"}/>
 								</Form>
 								<br/>
 								<br/>
