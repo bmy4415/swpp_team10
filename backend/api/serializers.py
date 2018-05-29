@@ -15,7 +15,45 @@ class StoreSerializer(serializers.ModelSerializer):
         model = Store
         fields = ('id', 'account', 'password', 'phone_number', 'address', 'name')
 
-'''
+class CouponSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = Coupon
+        fields = ('id', 'store', 'stamp_count')
+
+class CustomerNameSerializer(serializers.ModelSerializer):
+    customer = serializers.CharField()
+    class Meta:
+        model = Has_coupon
+        fields = ('customer',)
+
+class HasCouponSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Has_coupon
+        fields = ('customer', 'coupon')
+
+class CouponStoreSerializer(serializers.ModelSerializer):
+    id = serializers.ReadOnlyField()
+    store = StoreSerializer(read_only=True)
+    class Meta:
+        model = Coupon
+        fields = ('id', 'store', 'stamp_count')
+
+class CustomerHasCouponStoreSerializer(serializers.ModelSerializer):
+    customer = CustomerSerializer(read_only=True)
+    coupon = CouponStoreSerializer(read_only=True)
+    class Meta:
+        model = Has_coupon
+        fields = ('customer', 'coupon')
+
+class StampingSerializer(serializers.ModelSerializer):
+    id = serializers.ReadOnlyField()
+    store = StoreSerializer(read_only=True)  
+    stamp_count = serializers.ReadOnlyField()  
+    class Meta:
+        model = Coupon
+        fields = ('id', 'store', 'stamp_count')
+'''   
 class SnippetSerializer(serializers.Serializer):
     id = serializers.IntegerField(read_only=True)
     title = serializers.CharField(required=False, allow_blank=True, max_length=100)
