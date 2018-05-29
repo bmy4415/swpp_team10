@@ -15,26 +15,17 @@ from django.db import IntegrityError
 # Create your views here.
 
 class MyLoginView(LoginView):
-    def get_success_url(self):
-        url = self.get_redirect_url()
+    def form_valid(self, form):
+        auth_login(self.request, form.get_user())
         customer = Customer.objects.filter(user=self.request.user)
-        
         if len(customer) == 1:  
-            LOGIN_REDIRECT_URL = '/api/success_customer_login/'
+            return JsonResponse({'is_customer': 'True'}, status=200)
         else :
-            LOGIN_REDIRECT_URL = '/api/success_store_login/'
+            return JsonResponse({'is_customer': 'False'}, status=200)        
 
-        return url or resolve_url(LOGIN_REDIRECT_URL)
-   
-# {'customer': 'Customer object (4)'}
 class MyLogoutView(LogoutView):
     next_page = '/'
 
-def SuccessCustomerLogin(request):
-    return JsonResponse({'is_customer': 'True'}, status=200)
-
-def SuccessStoreLogin(request):
-    return JsonResponse({'is_customer': 'False'}, status=401)
 
 # [TODO] CustomerSignUp must not be seen.
 class CustomerSignUp(generics.CreateAPIView):

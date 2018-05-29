@@ -23,14 +23,14 @@ class CouponPanel extends Component {
 			<div className="CouponPanel">
 				<Grid>
 					<Grid.Row columns={5}>
-			{ fstRows.map(b =>
+			{ sndRows.map(b =>
 						<Grid.Column key={key++}>
 							<Stamp isStamped={b} key={key++}/>
 						</Grid.Column>
 			) }
 					</Grid.Row>
 					<Grid.Row columns={5}>
-			{ sndRows.map(b =>
+			{ fstRows.map(b =>
 						<Grid.Column key={key++}>
 							<Stamp isStamped={b} key={key++}/>
 						</Grid.Column>

@@ -27,8 +27,7 @@ class SigninTests(TestCase):
         print("\n4. Test customer sign in...")
         create_result = create_customer(self, self.username, self.password, self.phone_number)
         signin_result = self.client.post(self.url, {"username" : self.username, "password" : self.password})
-        self.assertRedirects(signin_result, '/api/success_page/')
-    
+        self.assertEqual(signin_result.status_code, 200)
     # check customer sign in wrong password case(bad)
     def test_customer_sign_in_wrong_pwd(self):
         print("\n5. Test customer sign in with wrong password...")
@@ -41,8 +40,7 @@ class SigninTests(TestCase):
         print("\n6. Test store sign in...")
         create_result = create_store(self, self.username, self.password, self.phone_number, self.address, self.store_name)
         signin_result = self.client.post(self.url, {"username" : self.username, "password" : self.password})
-        self.assertRedirects(signin_result, '/api/success_page/')
-    
+        self.assertEqual(signin_result.status_code, 200)
     # check store sign in wrong password case(bad)
     def test_store_sign_in_wrong_pwd(self):
         print("\n7. Test store sign in with wrong password...")

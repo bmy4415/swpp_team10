@@ -7,37 +7,54 @@ class MainPage extends Component {
 	state = {
 		id:'',
 		password:'',
-		userType:'store', // for debug
+		loginFailed:false,
 	}
 
 	onSubmitLogin = ((event) => {
 		event.preventDefault();
-
+		//!! backend login view is using native django login view, so it doesn't have serializer for json request. we have to post request with formdata type.
+		let formData = new FormData();
+		formData.append('username', this.state.id);
+		formData.append('password', this.state.password);
 		fetch("http://localhost:8000/api/login/", {
 			method: 'POST',
 			headers: {
-				'Accept' : 'application/json',
-				'Content-Type' : 'application/json',
 				'X-CSRFToken' : cookie.load('csrftoken'),
 			},
-			body: JSON.stringify({
-				username: this.state.id,
-				password: this.state.password,
-			}),
+			body: formData, 
 			credentials: 'include',
-		}).then((response) => {
-			console.log(response);
-			if(response.ok)
-			{
-				this.props.onLoginPassed(this.state.id, this.state.userType);// arguments should be replaced according to response	
-				console.log(this.props.statefunction);
-			}
-			else
-			{
-				throw Error(response.statusText);
-			}
-		}).catch((err) => {
-			console.log(err);
+		}).then((response) =>
+		{
+			response.json()
+				.then((json)=>{
+					console.log("login success");
+					if(json.is_customer === "True")
+					{	
+						this.setState({
+							id: '',
+							password: '',
+							loginFailed: false,
+						});
+						this.props.onLoginPassed(this.state.id, "customer");
+					}
+					else
+					{
+						this.setState({
+							id: '',
+							password: '',
+							loginFailed: false,
+						});
+						this.props.onLoginPassed(this.state.id, "store");
+					}
+				})
+				.catch(()=>{
+					console.log("login failed")
+					this.setState({
+						id: '',
+						password: '',
+						loginFailed: true,
+					});
+				});
 		})
 			
 	})
@@ -89,6 +106,12 @@ class MainPage extends Component {
 						</Grid.Row>
 					</Grid>
 				</Container>
+				<Grid>
+					{this.state.loginFailed 
+						?
+						<h1> Please check your account and password again </h1>
+						:null}
+				</Grid>
 			</div>
 		);
 	}

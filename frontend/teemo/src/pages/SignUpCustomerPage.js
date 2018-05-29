@@ -9,12 +9,39 @@ class SignUpCustomerPage extends Component {
 		password:'',
 		passwordCheck:'',
 		phoneNumber:'',
-		message:'',
+		message:undefined,
 	}
 
 	onSubmitSignUp = ((event) => {
 		event.preventDefault();
-		// TODO: need check password logic!
+		let regExp = /^01[016789]{1}-?[0-9]{3,4}-?[0-9]{4}$/;
+		// Check sign up forms 
+		if(Object.values(this.state).find((value)=>{
+			return value==='';	
+		})!==undefined) // if there exists empty input field
+		{
+			this.setState({
+				message:"Please fill all fields",
+			})
+			return;
+		}
+		else if(this.state.password !== this.state.passwordCheck)
+		{
+			this.setState({
+				password: '',
+				passwordCheck: '',
+				message:"Check your password again",
+			});
+			return;
+		}
+		else if(!regExp.test(this.state.phoneNumber))
+		{
+			this.setState({
+				phoneNumber:'',
+				message:"Check your phone number format",
+			});
+			return;
+		}
 		fetch("http://localhost:8000/api/customer_sign_up/", {
 			method: 'POST',
 			headers: {
@@ -32,7 +59,12 @@ class SignUpCustomerPage extends Component {
 			console.log(response);
 			if(response.ok)
 			{
-				console.log(this.props.statefunction);
+				this.setState({
+					id:'',
+					password:'',
+					passwordCheck:'',
+					phoneNumber:'',
+					message:undefined});
 				this.props.history.push("/");
 			}
 			else
@@ -40,7 +72,10 @@ class SignUpCustomerPage extends Component {
 				throw Error(response.statusText);
 			}
 		}).catch((err) => {
-			console.log(err);
+			this.setState({
+				id: '',
+				message: "Account already exist"});
+			return;
 		})
 	}) 
 	
@@ -96,6 +131,9 @@ class SignUpCustomerPage extends Component {
 								<br/>
 							</Grid.Column>
 						</Grid.Row>
+					</Grid>
+					<Grid>
+						<h1> {this.state.message} </h1>
 					</Grid>
 				</Container>
 			</div>
