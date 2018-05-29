@@ -16,3 +16,10 @@ urlpatterns += [
     url(r'^customer_sign_up/$', views.CustomerSignUp.as_view()),
     url(r'^store_sign_up/$', views.StoreSignUp.as_view()),
 ]
+
+urlpatterns += [
+    url(r'^coupon_publishing/$', views.CouponPublishing.as_view()),
+    url(r'^coupon_list_of_customer/$', views.CouponListOfCustomer.as_view()),
+    url(r'^coupon_list_of_store/$', views.CouponListOfStore.as_view()),
+    url(r'^coupon_stamping/(?P<pk>[0-9]+)$', views.CouponStamping.as_view()),   
+]
