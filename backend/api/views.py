@@ -6,10 +6,10 @@ from rest_framework import generics
 from django.contrib.auth.models import User
 from rest_framework.response import Response
 from rest_framework import status
+from django.http import JsonResponse
 
 from django.shortcuts import render, redirect
 from django.contrib.auth.views import *
-from django.views.generic.base import TemplateView
 
 from django.db import IntegrityError
 # Create your views here.
@@ -17,20 +17,24 @@ from django.db import IntegrityError
 class MyLoginView(LoginView):
     def get_success_url(self):
         url = self.get_redirect_url()
-        """
-	    if request.user.isCustomer:
-		    LOGIN_REDIRECT_URL = ''
-	    else:
-		    LOGIN_REDIRECT_URL = ''
-        """
-        LOGIN_REDIRECT_URL = '/api/success_page/'
-        return url or resolve_url(LOGIN_REDIRECT_URL)
+        customer = Customer.objects.filter(user=self.request.user)
+        
+        if len(customer) == 1:  
+            LOGIN_REDIRECT_URL = '/api/success_customer_login/'
+        else :
+            LOGIN_REDIRECT_URL = '/api/success_store_login/'
 
+        return url or resolve_url(LOGIN_REDIRECT_URL)
+   
+# {'customer': 'Customer object (4)'}
 class MyLogoutView(LogoutView):
     next_page = '/'
 
-SuccessView = TemplateView
+def SuccessCustomerLogin(request):
+    return JsonResponse({'is_customer': 'True'}, status=200)
 
+def SuccessStoreLogin(request):
+    return JsonResponse({'is_customer': 'False'}, status=401)
 
 # [TODO] CustomerSignUp must not be seen.
 class CustomerSignUp(generics.CreateAPIView):
@@ -82,7 +86,7 @@ class StoreSignUp(generics.CreateAPIView):
 
 class CouponPublishing(generics.CreateAPIView):
     '''
-    request have to send customer name, cookie(login)
+    request have to send customer account, cookie(login)
     '''
     serializer_class = CustomerNameSerializer
 
@@ -103,6 +107,7 @@ class CouponPublishing(generics.CreateAPIView):
             self.perform_create(serializer, request_store)
         except IntegrityError:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        print(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 class CouponListOfCustomer(generics.ListAPIView):
