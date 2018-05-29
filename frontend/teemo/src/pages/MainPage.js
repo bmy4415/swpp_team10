@@ -11,19 +11,33 @@ class MainPage extends Component {
 
 	onSubmitLogin = /*async*/ ((event) => {
 		event.preventDefault();
-		/*await axios.fetch(...).then((err, result) => {
-		 * if(passed) 
-		 * {
-		 *		onLoginPassed(id); // save id in state
-		 * }
-		 * else
-		 * {
-		 *		this.setState({id:'', password:'',});
-		 * }
-		 */
-		this.props.onLoginPassed(this.state.id, this.state.userType);// arguments should be replaced according to response
-		console.log(this.props.statefunction);
+
+		fetch("https://localhost:8000", {
+			method: 'POST',
+			headers: {
+				'Accept' : 'application/json',
+				'Content-Type' : 'application/json',
+			},
+			body: JSON.stringify({
+				username: this.state.id,
+				password: this.state.password,
+			})
+		}).then((response) => {
+			console.log(response);
+			if(response.ok)
+			{
+				this.props.onLoginPassed(this.state.id, this.state.userType);// arguments should be replaced according to response	
+				console.log(this.props.statefunction);
+			}
+			else
+			{
+				throw Error(response.statusText);
+			}
+		}).catch((err) => {
+			console.log(err);
 		})
+			
+	})
 	
 
     captureId = (event) => {
