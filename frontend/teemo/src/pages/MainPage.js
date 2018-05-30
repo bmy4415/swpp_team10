@@ -1,29 +1,63 @@
 import React, { Component } from 'react';
 import { Form, Button, Grid, Container } from 'semantic-ui-react';
 import { Redirect, Link } from 'react-router-dom';
+import cookie from 'react-cookies';
 
 class MainPage extends Component {
 	state = {
 		id:'',
 		password:'',
-		userType:'store', // for debug
+		loginFailed:false,
 	}
 
-	onSubmitLogin = /*async*/ ((event) => {
+	onSubmitLogin = ((event) => {
 		event.preventDefault();
-		/*await axios.fetch(...).then((err, result) => {
-		 * if(passed) 
-		 * {
-		 *		onLoginPassed(id); // save id in state
-		 * }
-		 * else
-		 * {
-		 *		this.setState({id:'', password:'',});
-		 * }
-		 */
-		this.props.onLoginPassed(this.state.id, this.state.userType);// arguments should be replaced according to response
-		console.log(this.props.statefunction);
+		//!! backend login view is using native django login view, so it doesn't have serializer for json request. we have to post request with formdata type.
+		let formData = new FormData();
+		formData.append('username', this.state.id);
+		formData.append('password', this.state.password);
+		fetch("http://localhost:8000/api/login/", {
+			method: 'POST',
+			headers: {
+				'X-CSRFToken' : cookie.load('csrftoken'),
+			},
+			body: formData, 
+			credentials: 'include',
+		}).then((response) =>
+		{
+			response.json()
+				.then((json)=>{
+					console.log("login success");
+					if(json.is_customer === "True")
+					{	
+						this.setState({
+							id: '',
+							password: '',
+							loginFailed: false,
+						});
+						this.props.onLoginPassed(this.state.id, "customer");
+					}
+					else
+					{
+						this.setState({
+							id: '',
+							password: '',
+							loginFailed: false,
+						});
+						this.props.onLoginPassed(this.state.id, "store");
+					}
+				})
+				.catch(()=>{
+					console.log("login failed")
+					this.setState({
+						id: '',
+						password: '',
+						loginFailed: true,
+					});
+				});
 		})
+			
+	})
 	
 
     captureId = (event) => {
@@ -72,6 +106,12 @@ class MainPage extends Component {
 						</Grid.Row>
 					</Grid>
 				</Container>
+				<Grid>
+					{this.state.loginFailed 
+						?
+						<h1> Please check your account and password again </h1>
+						:null}
+				</Grid>
 			</div>
 		);
 	}

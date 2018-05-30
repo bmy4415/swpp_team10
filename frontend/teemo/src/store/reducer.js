@@ -8,6 +8,8 @@ const reducer = (state = initialState, action) => {
 				id : action.id,
 				loggedInUserType : action.userType,
 			});
+		case "LOGOUT":
+			return initialState;
 
 		default:
 			return state;

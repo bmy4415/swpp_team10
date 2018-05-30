@@ -5,3 +5,9 @@ export const loginPassed = (id, userType) => {
 		userType : userType,
 	}
 }
+
+export const logout = () => {
+	return {
+		type : "LOGOUT",
+	}
+}

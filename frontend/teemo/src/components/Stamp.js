@@ -15,7 +15,7 @@ class Stamp extends Component {
 	render() {
 		return (
 			<div className="Stamp">
-				<Reveal active={this.props.isStamped ? true : this.state.stamped} animated='rotate' onClick={this.props.isStamped ? null : this.onClickStamp}>
+				<Reveal active={this.props.isStamped ? true : this.state.stamped} animated='fade' onClick={this.props.isStamped ? null : this.onClickStamp}>
 					<Reveal.Content visible>
 						<Image circular size='small' src={coverImage} />
 					</Reveal.Content>
