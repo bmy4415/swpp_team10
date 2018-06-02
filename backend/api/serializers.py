@@ -58,18 +58,21 @@ class CouponUsingSerializer(serializers.ModelSerializer):
     id = serializers.ReadOnlyField()
     store = StoreSerializer(read_only=True)  
     stamp_count = serializers.IntegerField()
-
     class Meta:
         model = Coupon
         depth = 1
-        fields = ('id', 'store', 'stamp_count', 'related_has_coupon')
+        fields = ('id', 'store', 'stamp_count')
 
-class CustomerGivingSerializer(serializers.ModelSerializer):
+class CouponGivingSerializer(serializers.ModelSerializer):
+
+    store = StoreSerializer(read_only=True)
+    stamp_count = serializers.IntegerField()
     customer = serializers.CharField()
-    coupon = CouponStoreSerializer()
+    
     class Meta:
-        model = Has_coupon
-        fields = ('customer', 'coupon')
+        model = Coupon
+        fields = ('id', 'store', 'stamp_count', 'customer')
+    
 
 '''   
 class SnippetSerializer(serializers.Serializer):

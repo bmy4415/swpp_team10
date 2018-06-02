@@ -5,12 +5,17 @@ class Customer(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     phone_number = models.CharField(max_length=14, unique=True)
 
+    def __str__(self):
+        return self.user.username
+
 class Store(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     address = models.CharField(max_length=100)
     name = models.CharField(max_length=100)
     phone_number = models.CharField(max_length=14, unique=True)
 
+    def __str__(self):
+        return self.user.username
 '''
 그니까... 저기서 말하는 related_name은 Coupon이 store_id를 폴린키로 가지니까
 나중에 Store 객체에서 all_coupon_of_store로 부르면
@@ -19,7 +24,11 @@ class Store(models.Model):
 class Coupon(models.Model):
     store = models.ForeignKey(Store, related_name='all_coupon_of_store', on_delete=models.CASCADE)
     stamp_count = models.IntegerField(default=0)
-    
+
+    @property
+    def customer(self):
+        has_coupon = Has_coupon.objects.get(coupon=self)
+        return has_coupon.customer
 '''
 유저가 쿠폰을 가지고
 그 쿠폰의 스탬프는 저기 쿠폰에 따로 음
