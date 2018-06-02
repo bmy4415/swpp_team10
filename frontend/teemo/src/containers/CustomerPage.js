@@ -1,5 +1,5 @@
 import CustomerPage from '../pages/CustomerPage.js'
-import { loginPassed } from '../store/actions.js'
+import { setCustomerCouponList } from '../store/actions.js'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 
@@ -11,8 +11,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		onLoginPassed : (id) => {
-			dispatch(loginPassed(id))
+		onSetCustomerCouponList : (couponList) => {
+			dispatch(setCustomerCouponList(couponList))
 		},
 	}
 }

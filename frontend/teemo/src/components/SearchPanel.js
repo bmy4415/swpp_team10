@@ -3,24 +3,13 @@ import { Form, Grid, Button } from 'semantic-ui-react'
 
 class SearchPanel extends Component {
 	state = {
-		queryUserId: '',
+		queryInput: '',
 	}
 
-	onSubmit = (event) => {
-		event.preventDefault();
-		//call getCouponInfoById
-	};
-	captureUserId = (event) => {
+	captureQueryInput = (event) => {
 		event.stopPropagation()
 		event.preventDefault()
-		this.setState({queryUserId : event.target.value});
-	}
-
-	getCouponInfoById(){
-		//fetch call here
-		//onSetUserSearchResult
-		//
-		//coupon panel get this result and will be rendered 
+		this.setState({queryInput : event.target.value});
 	}
 
 	render() {
@@ -29,10 +18,10 @@ class SearchPanel extends Component {
                 <hr/>
                 <Grid>
                     <h3> Input user ID </h3>
-                    <Form onSubmit={this.onSubmit}>
+                    <Form onSubmit={this.props.onSubmit}>
                         <label>
                             User ID
-                            <input type="text" onChange = {this.captureUserId} />
+                            <input type="text" onChange = {this.captureQueryInput} />
                         </label>
                         <Button bsstyle="primary" type="submit">
                             Send it
