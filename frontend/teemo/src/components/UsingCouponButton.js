@@ -38,7 +38,7 @@ class UsingCouponButton extends Component {
 
 	}
 	options = () => {
-		let result = new Array();
+		let result = [];
 		for ( let i = 0; i <= this.props.statefunction.searchedStampCount ; i++ ) {
 			result[i] = {
 				key: i,
