@@ -4,6 +4,7 @@ import CouponPanel from '../containers/CouponPanel.js';
 import SearchPanel from '../components/SearchPanel.js';
 import LogoutButton from '../containers/LogoutButton.js';
 import PublishCouponButton from '../containers/PublishCouponButton.js'
+import UsingCouponButton from '../containers/UsingCouponButton.js'
 import cookie from 'react-cookies';
 
 class StorePage extends Component {
@@ -50,7 +51,29 @@ class StorePage extends Component {
 		})
 	}
 
-	
+	onClickStamp = () =>
+	{
+		console.log("http://localhost:8000/api/coupon_stamping/"+this.props.statefunction.queryCouponId)
+		fetch("http://localhost:8000/api/coupon_stamping/"+this.props.statefunction.queryCouponId, {
+			method: 'PUT',
+			headers: {
+				'Accept' : 'application/json',
+				'Content-Type' : 'application/json',
+				'X-CSRFToken' : cookie.load('csrftoken'),
+			},
+			credentials: 'include',
+		}).then((response) => {
+			console.log(response);
+			if(response.ok)
+			{
+				this.props.onSetSearchResult(this.props.statefunction.queryCouponId, undefined, this.props.statefunction.searchedStampCount+1)
+			}
+			else
+			{
+				console.log("Stamping failed");
+			}
+		})
+	}
 
 
 	render() {
@@ -67,10 +90,10 @@ class StorePage extends Component {
 				<h1> Store Page </h1>
 				<LogoutButton/>
 				<SearchPanel ref={(panelRef) => {this.panelRef = panelRef;}} onSubmit={this.onSubmitAccount}/>
-				<CouponPanel stampCount={this.props.statefunction.searchedStampCount}/>
+				<CouponPanel stampCount={this.props.statefunction.searchedStampCount} onClickStamp={this.onClickStamp}/>
 
 				{this.props.statefunction.queryCustomerAccount === undefined
-				? null
+				? <UsingCouponButton/>
 				: <PublishCouponButton queryCustomerAccount={this.props.statefunction.queryCustomerAccount}/>}
 			</div>
 		);

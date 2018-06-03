@@ -8,14 +8,14 @@ class Stamp extends Component {
 		stamped: false,
 	}
 
-	onClickStamp = () => {
-		this.setState({stamped: true});
-		// need to fetch add coupon
+	onClick = () => {
+		this.props.onClickStamp();
+		console.log("Stamping success");
 	}
 	render() {
 		return (
 			<div className="Stamp">
-				<Reveal active={this.props.isStamped ? true : this.state.stamped} animated='fade' onClick={this.props.isStamped ? null : this.onClickStamp}>
+				<Reveal active={this.props.isStamped} animated='fade' onClick={this.props.isStamped ? null : this.onClick}>
 					<Reveal.Content visible>
 						<Image circular size='small' src={coverImage} />
 					</Reveal.Content>

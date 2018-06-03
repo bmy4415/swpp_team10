@@ -35,14 +35,14 @@ class CouponPanel extends Component {
 				<Grid.Row columns={5}>
 				{ sndRows.map(b =>
 					<Grid.Column key={key++}>
-					<Stamp isStamped={b} key={key++}/>
+					<Stamp isStamped={b} key={key++} onClickStamp={this.props.onClickStamp}/>
 					</Grid.Column>
 				) }
 				</Grid.Row>
 				<Grid.Row columns={5}>
 				{ fstRows.map(b =>
 					<Grid.Column key={key++}>
-					<Stamp isStamped={b} key={key++}/>
+					<Stamp isStamped={b} key={key++} onClickStamp={this.props.onClickStamp}/>
 					</Grid.Column>
 				) }
 				</Grid.Row>

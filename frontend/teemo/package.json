@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "django-react-csrftoken": "^1.0.3",
     "react": "^16.4.0",
     "react-cookie": "^2.1.6",
     "react-cookies": "^0.1.0",
