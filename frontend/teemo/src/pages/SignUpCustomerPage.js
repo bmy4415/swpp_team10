@@ -9,75 +9,66 @@ class SignUpCustomerPage extends Component {
 		password:'',
 		passwordCheck:'',
 		phoneNumber:'',
-		message:undefined,
 	}
 
-	onSubmitSignUp = ((event) => {
+	onSubmitSignUp = (event) => {
 		event.preventDefault();
-		let regExp = /^01[016789]{1}-?[0-9]{3,4}-?[0-9]{4}$/;
+
 		// Check sign up forms 
-		if(Object.values(this.state).find((value)=>{
-			return value==='';	
-		})!==undefined) // if there exists empty input field
-		{
-			this.setState({
-				message:"Please fill all fields",
-			})
+		const result = checkSignUpForm(this.state);
+
+		if (result === 'Please fill all fields') {
+			alert('Please fill all fields');
 			return;
 		}
-		else if(this.state.password !== this.state.passwordCheck)
-		{
+
+		if (result === 'Check your password again') {
+			alert('Check your password again');
 			this.setState({
 				password: '',
 				passwordCheck: '',
-				message:"Check your password again",
+			});
+			return;
+		} 
+
+		if (result === 'Check your phone number format') {
+			alert('Check your phone number format');
+			this.setState({
+				phoneNumber: '',
 			});
 			return;
 		}
-		else if(!regExp.test(this.state.phoneNumber))
-		{
-			this.setState({
-				phoneNumber:'',
-				message:"Check your phone number format",
-			});
-			return;
-		}
-		fetch("http://localhost:8000/api/customer_sign_up/", {
-			method: 'POST',
-			headers: {
-				'Accept' : 'application/json',
-				'Content-Type' : 'application/json',
-				'X-CSRFToken' : cookie.load('csrftoken'),
-			},
-			body: JSON.stringify({
-				account: this.state.id,
-				password: this.state.password,
-				phone_number: this.state.phoneNumber,
-			}),
-			credentials: 'include',
-		}).then((response) => {
-			console.log(response);
-			if(response.ok)
-			{
-				this.setState({
-					id:'',
-					password:'',
-					passwordCheck:'',
-					phoneNumber:'',
-					message:undefined});
-				this.props.history.push("/");
-			}
-			else
-			{
-				throw Error(response.statusText);
-			}
-		}).catch((err) => {
-			this.setState({
-				id: '',
-				message: "Account already exist"});
-			return;
-		})
-	}) 
+
+		if (result === 'valid') {
+			// valid form, try to signup
+			const { id, password, phone } = this.state;
+			callSignUpApi(id, password, phone)
+				.then(({ err, response }) => {
+					if (err) {
+						alert('Some error happens, try later');
+						return;
+					}
+
+					if (response.ok === false) {
+						// 이미 존재하는 id라는 메시지를 확실히 날려주면 그에 해당하는 message를 띄워주기 좋음
+						// 지금은 확신이 없엉서 statusText를 그대로 띄움
+						alert(response.statusText);
+						this.setState({ id: '' });
+						return;
+					}
+
+					// signup success
+					this.setState({
+						id:'',
+						password:'',
+						passwordCheck:'',
+						phoneNumber:'',
+					});
+					this.props.history.push("/");
+				});
+		} // if - valid
+
+	}
 	
 
     captureId = (event) => {
@@ -139,6 +130,61 @@ class SignUpCustomerPage extends Component {
 			</div>
 		);
 	}
+}
+
+
+
+/**
+ *	Check signup form
+ *	if signup form is valid, return 'valid'
+ *	if signup form is not valid, return corresponding message
+ */
+function checkSignUpForm(state) {
+	const { id, password, passwordCheck, phoneNumber } = state;
+	const regExp = /^01[016789]{1}-?[0-9]{3,4}-?[0-9]{4}$/;
+
+	// if there exists empty fields
+	if(!id || !password || !passwordCheck || !phoneNumber) {
+		return 'Please fill all fields';
+	}
+
+	if(password !== passwordCheck) {
+		return 'Check your password again';
+	}
+
+	if(!regExp.test(phoneNumber)) {
+		return 'Check your phone number format';
+	}
+
+	return 'valid';
+}
+
+/**
+ *	Call sign up api
+ *	길어서 밑으로 뺐음
+ *
+ *	return	Promise	promise that resolves error and response
+ */
+function callSignUpApi(id, password, phoneNumber) {
+	return fetch("http://localhost:8000/api/customer_sign_up/", {
+		method: 'POST',
+		headers: {
+			'Accept' : 'application/json',
+			'Content-Type' : 'application/json',
+			'X-CSRFToken' : cookie.load('csrftoken'),
+		},
+		body: JSON.stringify({
+			account: id,
+			password: password,
+			phone_number: phoneNumber,
+		}),
+		credentials: 'include',
+	}).then((response) => {
+		return { err: null, response };
+	}).catch((err) => {
+		return { err, response: null };
+	})
+
 }
 
 export default SignUpCustomerPage;
