@@ -1,7 +1,8 @@
 from api.models import Customer, Store, Coupon, Has_coupon
 from api.serializers import CustomerSerializer, StoreSerializer, CouponSerializer, HasCouponSerializer
 from api.serializers import  CouponStoreSerializer, CustomerHasCouponStoreSerializer 
-from api.serializers import CustomerNameSerializer, StampingSerializer
+from api.serializers import CustomerNameSerializer, CouponStampingSerializer, CouponUsingSerializer
+from api.serializers import CouponGivingSerializer
 from rest_framework import generics
 from django.contrib.auth.models import User
 from rest_framework.response import Response
@@ -14,6 +15,16 @@ from django.contrib.auth.views import *
 from django.db import IntegrityError
 # Create your views here.
 
+class AlreadyExistInDB(Exception):
+    pass
+class CustomerIsNotExist(Exception):
+    pass
+class StampInsufficient(Exception):
+    pass
+class GiverSameReceiver(Exception):
+    pass
+
+# [TODO] login can be phone_number also
 class MyLoginView(LoginView):
     def form_valid(self, form):
         auth_login(self.request, form.get_user())
@@ -26,8 +37,6 @@ class MyLoginView(LoginView):
 class MyLogoutView(LogoutView):
     next_page = '/'
 
-
-# [TODO] CustomerSignUp must not be seen.
 class CustomerSignUp(generics.CreateAPIView):
     """
     Create new Customer
@@ -43,15 +52,12 @@ class CustomerSignUp(generics.CreateAPIView):
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        # [TODO] check wrong form 
         try:
             self.perform_create(serializer)
         except IntegrityError:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        #return Response(serializer.data, status=status.HTTP_201_CREATED)
         return redirect('/')
 
-# [TODO] StoreSignUp must not be seen.
 class StoreSignUp(generics.CreateAPIView):
     """
     List all Store, or Create new Store
@@ -67,12 +73,10 @@ class StoreSignUp(generics.CreateAPIView):
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        # [TODO] check wrong form 
         try:
             self.perform_create(serializer)
         except IntegrityError:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        #return Response(serializer.data, status=status.HTTP_201_CREATED)
         return redirect('/')
 
 class CouponPublishing(generics.CreateAPIView):
@@ -82,24 +86,46 @@ class CouponPublishing(generics.CreateAPIView):
     serializer_class = CustomerNameSerializer
 
     def perform_create(self, serializer, request_store):
+
+        # customer is not exist in User.       
+        customer_user = User.objects.filter(username=serializer.validated_data['customer'])
+        if len(customer_user) == 1 :
+            owner_customer = Customer.objects.get(user=customer_user[0])
+        else :
+            customer_filtered= Customer.objects.filter(phone_number=serializer.validated_data['customer'])
+            if len(customer_filtered) == 0 :
+                raise CustomerIsNotExist
+            owner_customer=customer_filtered[0]
+        has_coupons = Has_coupon.objects.filter(customer=owner_customer)
+
+        coupons = Coupon.objects.filter(store=request_store)
+ 
+        # customer and store already had this coupon
+        for coupon in coupons :
+            for has_coupon in has_coupons :
+                if coupon == has_coupon.coupon :
+                    raise AlreadyExistInDB
+
         new_coupon = Coupon.objects.create(
                                 store=request_store,
                                 stamp_count=0)
-        customer_user = User.objects.get(username=serializer.validated_data['customer'])
-        owner_customer = Customer.objects.get(user=customer_user)
         serializer.save(customer = owner_customer, coupon = new_coupon )
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         request_store = Store.objects.get(user=request.user)
-        # [TODO] check wrong form 
+
         try:
             self.perform_create(serializer, request_store)
         except IntegrityError:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        print(serializer.data)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        except AlreadyExistInDB:
+            return JsonResponse({'msg' : 'AlreadyExistInDB'}, status=400)
+        except CustomerIsNotExist:
+            return JsonResponse({'msg' : 'CustomerIsNotExist'}, status=400)
+        
+        return JsonResponse({'msg' : 'SuccessPublishing'}, status=201)
 
 class CouponListOfCustomer(generics.ListAPIView):
     '''
@@ -128,7 +154,7 @@ class CouponStamping(generics.RetrieveUpdateAPIView):
     '''
     request have to send to /api/coupon_stamping/%coupon_id%
     '''
-    serializer_class = StampingSerializer
+    serializer_class = CouponStampingSerializer
     queryset = Coupon.objects.all()
     
     def perform_update(self, serializer):
@@ -136,3 +162,160 @@ class CouponStamping(generics.RetrieveUpdateAPIView):
         old_data_serializer = self.get_serializer(instance)
         stamp = old_data_serializer.data["stamp_count"]
         serializer.save(stamp_count = stamp+1)
+
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        
+        ## if request user is not owner of coupon
+        request_store_name = request.user.username
+        db_serializer = self.get_serializer(instance)
+        if db_serializer.data["store"]['account'] != request_store_name :
+            return JsonResponse({'msg' : 'YouAreNotOwnerOfCoupon'}, status=400)
+        
+        self.perform_update(serializer)
+        if getattr(instance, '_prefetched_objects_cache', None):
+            # If 'prefetch_related' has been applied to a queryset, we need to
+            # forcibly invalidate the prefetch cache on the instance.
+            instance._prefetched_objects_cache = {}
+
+        return Response(serializer.data)
+
+class CouponUsing(generics.RetrieveUpdateAPIView):
+    '''
+    request have to send to api/coupon_using/%coupon_id%, How many use stamp
+    '''
+    serializer_class = CouponUsingSerializer
+    queryset = Coupon.objects.all()
+
+    def perform_update(self, serializer):
+        instance = self.get_object()
+        curr_data_serializer = self.get_serializer(instance)
+        curr_stamp = curr_data_serializer.data["stamp_count"]
+        request_stamp = serializer.validated_data["stamp_count"] 
+        if request_stamp < 1 :
+            raise ValueError
+        elif curr_stamp < request_stamp :
+            raise StampInsufficient
+        serializer.save(stamp_count=curr_stamp-request_stamp)
+        
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        
+        ## if request user is not owner of coupon
+        request_store_name = request.user.username
+        db_serializer = self.get_serializer(instance)
+
+        if db_serializer.data["store"]['account'] != request_store_name :
+            return JsonResponse({'msg' : 'YouAreNotOwnerOfCoupon'}, status=400)
+        
+        try:
+            self.perform_update(serializer)
+        except ValueError :
+            JsonResponse({'msg': 'ValueError'}, status=400)
+        except StampInsufficient:
+            return JsonResponse({'msg': 'StampInsufficient'}, status=400)
+
+        if getattr(instance, '_prefetched_objects_cache', None):
+            # If 'prefetch_related' has been applied to a queryset, we need to
+            # forcibly invalidate the prefetch cache on the instance.
+            instance._prefetched_objects_cache = {}
+
+        return Response(serializer.data)
+
+class CouponGiving(generics.RetrieveUpdateAPIView):
+    serializer_class = CouponGivingSerializer
+    queryset = Coupon.objects.all()
+
+    def perform_update(self, serializer, db_serializer):
+        # to_customer exist?
+        to_customer_name = serializer.validated_data['customer']
+        
+        to_customer_user = User.objects.filter(username=to_customer_name)
+
+        if len(to_customer_user) == 1 :
+            to_customer = Customer.objects.get(user=to_customer_user[0])
+        else :
+            # have to find with phone_number
+            customer_filtered= Customer.objects.filter(phone_number=to_customer_name)
+            if len(customer_filtered) == 0 :
+                raise CustomerIsNotExist
+            to_customer = customer_filtered[0]
+        
+        # to_customer == request_user
+        if self.request.user.username == to_customer.user.username :
+            raise GiverSameReceiver
+
+        # request stamp_count must be >= 1
+        if serializer.validated_data['stamp_count'] < 1 :
+            raise ValueError
+
+        # request stamp_count must be <= coupon['stamp_count']
+        if serializer.validated_data['stamp_count'] > db_serializer.data['stamp_count'] :
+            raise StampInsufficient
+        
+        # if to_customer had coupon, just use this coupon
+        has_coupons = Has_coupon.objects.filter(customer=to_customer)
+        owner_store = Store.objects.get(id=db_serializer.data['store']['id'])
+        to_coupon_is_exist = 0
+        for has_element in has_coupons :
+            if has_element.coupon.store.id == owner_store.id :
+                to_coupon = has_element.coupon
+                to_coupon_is_exist = 1
+        
+        # to_customer don't have coupon. create coupon here
+        if to_coupon_is_exist == 0 :
+            print("has_coupon_is_not_exist")
+            new_coupon = Coupon.objects.create(
+                                store=owner_store,
+                                stamp_count=0)
+            new_has_coupon = Has_coupon.objects.create(
+                                customer=to_customer,
+                                coupon=new_coupon)
+            to_coupon = new_coupon
+
+        give_stamp = serializer.validated_data['stamp_count'] 
+        new_stamp = db_serializer.data['stamp_count'] - give_stamp
+        
+        to_coupon.stamp_count += give_stamp
+        to_coupon.save()
+        
+        giver_coupon = Coupon.objects.get(id = db_serializer.data['id'])
+        giver_coupon.stamp_count = new_stamp
+        giver_coupon.save()
+        
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        
+        # coupon owner == request.user
+        db_serializer = self.get_serializer(instance)
+        request_customer = Customer.objects.get(user=request.user)
+        if db_serializer.data['customer'] != request_customer.user.username :
+            return JsonResponse({'msg' : 'YouAreNotOwnerOfCoupon'}, status=400)
+        
+        # transmitter == receiver
+        try:
+            self.perform_update(serializer, db_serializer)
+        except ValueError :
+            return JsonResponse({'msg': 'ValueError'}, status=400)
+        except StampInsufficient:
+            return JsonResponse({'msg' : 'StampInsufficient'}, status=400)
+        except CustomerIsNotExist:
+            return JsonResponse({'msg' : 'CustomerIsNotExist'}, status=400)
+        except GiverSameReceiver:
+            return JsonResponse({'msg' : 'GiverSameReceiver'}, status=400)
+
+        if getattr(instance, '_prefetched_objects_cache', None):
+            # If 'prefetch_related' has been applied to a queryset, we need to
+            # forcibly invalidate the prefetch cache on the instance.
+            instance._prefetched_objects_cache = {}
+
+        return Response(serializer.data)
