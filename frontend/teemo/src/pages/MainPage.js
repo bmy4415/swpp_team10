@@ -25,6 +25,10 @@ class MainPage extends Component {
 			credentials: 'include',
 		}).then((response) =>
 		{
+			if(!response.ok)
+			{
+				throw Error(response.statusText);
+			}
 			response.json()
 				.then((json)=>{
 					console.log("login success");
@@ -54,7 +58,10 @@ class MainPage extends Component {
 						password: '',
 						loginFailed: true,
 					});
+					alert("Check your account or password");
 				});
+		}).catch((err) => {
+			alert("Unknown error has occured. Please try again.");
 		})
 			
 	})

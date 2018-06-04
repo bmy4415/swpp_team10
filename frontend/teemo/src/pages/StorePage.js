@@ -47,6 +47,7 @@ class StorePage extends Component {
 			}
 		}).catch((err) => {
 			console.log("coupon_list_of_store error");
+			alert("Unknown error has occured while getting coupon list. Please try again.");
 			return;
 		})
 	}
@@ -71,6 +72,7 @@ class StorePage extends Component {
 			else
 			{
 				console.log("Stamping failed");
+				alert("Unknown error has occured while stamping. Please try again.");
 			}
 		})
 	}

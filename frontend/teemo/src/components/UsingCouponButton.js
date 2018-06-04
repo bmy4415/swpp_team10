@@ -33,6 +33,7 @@ class UsingCouponButton extends Component {
 				this.setState({
 					message: "Using coupon failed"
 				});
+				alert("Unknown error has occured while using coupon. Please try again.");
 			}
 		})
 
