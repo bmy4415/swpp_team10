@@ -32,6 +32,7 @@ class PublishCouponButton extends Component {
 						this.setState({
 							message: "Publish failed",
 						});
+						alert("Unknown error has occured while publishing a coupon. Please try again.");
 					}
 					else
 					{
@@ -45,6 +46,7 @@ class PublishCouponButton extends Component {
 			}
 		}).catch((err) => {
 			console.log("coupon_list_of_store error");
+			alert("Unknown error has occured while getting coupon list. Please try again.");
 			return;
 		})
 	}
@@ -74,6 +76,7 @@ class PublishCouponButton extends Component {
 				this.setState({
 					message: "Customer doesn't exist"
 				});
+				alert("Customer doesn't exist.");
 			}
 		})
 

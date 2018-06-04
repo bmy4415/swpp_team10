@@ -27,6 +27,7 @@ class SignUpStorePage extends Component {
 			this.setState({
 				message:"Please fill all fields",
 			})
+			alert("Please fill all fields");
 			return;
 		}
 		else if(this.state.password !== this.state.passwordCheck)
@@ -36,6 +37,7 @@ class SignUpStorePage extends Component {
 				passwordCheck: '',
 				message:"Check your password again",
 			});
+			alert("Password is not identical to password check");
 			return;
 		}
 		else if(!regExp.test(this.state.phoneNumber))
@@ -44,6 +46,7 @@ class SignUpStorePage extends Component {
 				phoneNumber:'',
 				message:"Check your phone number format",
 			});
+			alert("Check your phone number format");
 			return;
 		}
 		fetch("http://localhost:8000/api/store_sign_up/", {
@@ -82,7 +85,9 @@ class SignUpStorePage extends Component {
 		}).catch((err) => {
 			this.setState({
 				id: '',
-				message: "Account already exist"});
+				message: "Account already exist"
+			});
+			alert("Account or phone number already exist" + "\nerr: " + err.msg);
 			return;
 		})
 	}) 
