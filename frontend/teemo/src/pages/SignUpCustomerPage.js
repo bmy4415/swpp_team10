@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Form, Button, Grid, Container } from 'semantic-ui-react'
 import { Redirect } from 'react-router-dom'
 import cookie from 'react-cookies';
+import axios from 'axios';
 
 class SignUpCustomerPage extends Component {
 	state = {
@@ -41,33 +42,33 @@ class SignUpCustomerPage extends Component {
 
 		if (result === 'valid') {
 			// valid form, try to signup
-			const { id, password, phone } = this.state;
-			callSignUpApi(id, password, phone)
+			const { id, password, phoneNumber } = this.state;
+			callSignUpApi(id, password, phoneNumber)
 				.then(({ err, response }) => {
 					if (err) {
-						alert('Some error happens, try later');
-						return;
-					}
-
-					if (response.ok === false) {
-						// 이미 존재하는 id라는 메시지를 확실히 날려주면 그에 해당하는 message를 띄워주기 좋음
-						// 지금은 확신이 없엉서 statusText를 그대로 띄움
-						alert(response.statusText);
-						this.setState({ id: '' });
+						const msg = err.response.data.msg;
+						if (msg === 'AccountExistInDB') {
+							alert('Account already exists, use another one');
+							this.setState({ id: '' });
+						} else if (msg === 'PhoneNumberExistInDB') {
+							alert('PhoneNumber already exists, use another one');
+							this.setState({ phoneNumber: '' });
+						} else {
+							alert('Some error happens, try later');
+						}
 						return;
 					}
 
 					// signup success
 					this.setState({
-						id:'',
-						password:'',
-						passwordCheck:'',
-						phoneNumber:'',
+						id: '',
+						password: '',
+						passwordCheck: '',
+						phoneNumber: '',
 					});
 					this.props.history.push("/");
 				});
 		} // if - valid
-
 	}
 	
 
@@ -166,24 +167,47 @@ function checkSignUpForm(state) {
  *	return	Promise	promise that resolves error and response
  */
 function callSignUpApi(id, password, phoneNumber) {
-	return fetch("http://localhost:8000/api/customer_sign_up/", {
+	const options = {
 		method: 'POST',
+		url: 'http://localhost:8000/api/customer_sign_up/',
 		headers: {
 			'Accept' : 'application/json',
 			'Content-Type' : 'application/json',
 			'X-CSRFToken' : cookie.load('csrftoken'),
 		},
-		body: JSON.stringify({
+		data: JSON.stringify({
 			account: id,
 			password: password,
 			phone_number: phoneNumber,
 		}),
-		credentials: 'include',
-	}).then((response) => {
-		return { err: null, response };
-	}).catch((err) => {
-		return { err, response: null };
-	})
+		withCredentials: true,
+	};
+
+	return axios(options)
+		.then((response) => {
+			return { err: null, response };
+		}).catch((err) => {
+			return { err, response: null };
+		});
+
+	// return fetch("http://localhost:8000/api/customer_sign_up/", {
+	//     method: 'POST',
+	//     headers: {
+	//         'Accept' : 'application/json',
+	//         'Content-Type' : 'application/json',
+	//         'X-CSRFToken' : cookie.load('csrftoken'),
+	//     },
+	//     body: JSON.stringify({
+	//         account: id,
+	//         password: password,
+	//         phone_number: phoneNumber,
+	//     }),
+	//     credentials: 'include',
+	// }).then((response) => {
+	//     return { err: null, response };
+	// }).catch((err) => {
+	//     return { err, response: null };
+	// })
 
 }
 
