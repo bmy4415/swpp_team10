@@ -23,6 +23,10 @@ class StampInsufficient(Exception):
     pass
 class GiverSameReceiver(Exception):
     pass
+class AccountExistInDB(Exception):
+    pass
+class PhoneNumberExistInDB(Exception):
+    pass
 
 # [TODO] login can be phone_number also
 class MyLoginView(LoginView):
@@ -44,6 +48,21 @@ class CustomerSignUp(generics.CreateAPIView):
     serializer_class = CustomerSerializer
 
     def perform_create(self, serializer):
+        # check  duplicate of account, phone_number
+        new_user_name = serializer.validated_data['user']['username']
+        new_phone_number = serializer.validated_data['phone_number']
+        
+        find_customer = User.objects.filter(username=new_user_name)
+        find_customer2 = Customer.objects.filter(phone_number=new_phone_number)
+        find_customer3 = Store.objects.filter(phone_number=new_phone_number)
+
+        if len(find_customer) != 0 :
+            raise AccountExistInDB
+        if len(find_customer2) != 0 :
+            raise PhoneNumberExistInDB
+        if len(find_customer3) != 0 :
+            raise PhoneNumberExistInDB
+
         new_user = User.objects.create_user(
                                  username=serializer.validated_data['user']['username'],
                                  password=serializer.validated_data['user']['password'])
@@ -54,6 +73,10 @@ class CustomerSignUp(generics.CreateAPIView):
         serializer.is_valid(raise_exception=True)
         try:
             self.perform_create(serializer)
+        except AccountExistInDB :
+            return JsonResponse({'msg' : 'AccountExistInDB'}, status=400)
+        except PhoneNumberExistInDB :
+            return JsonResponse({'msg' : 'PhoneNumberExistInDB'}, status=400)
         except IntegrityError:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         return redirect('/')
@@ -65,6 +88,22 @@ class StoreSignUp(generics.CreateAPIView):
     serializer_class = StoreSerializer
 
     def perform_create(self, serializer):
+
+        # check  duplicate of account, phone_number
+        new_user_name = serializer.validated_data['user']['username']
+        new_phone_number = serializer.validated_data['phone_number']
+
+        find_store = User.objects.filter(username=new_user_name)
+        find_store2 = Store.objects.filter(phone_number=new_phone_number)
+        find_store3 = Customer.objects.filter(phone_number=new_phone_number)
+
+        if len(find_store) != 0 :
+            raise AccountExistInDB
+        if len(find_store2) != 0 :
+            raise PhoneNumberExistInDB
+        if len(find_store3) != 0 :
+            raise PhoneNumberExistInDB
+            
         new_user = User.objects.create_user(
                                  username=serializer.validated_data['user']['username'],
                                  password=serializer.validated_data['user']['password'])
@@ -75,6 +114,10 @@ class StoreSignUp(generics.CreateAPIView):
         serializer.is_valid(raise_exception=True)
         try:
             self.perform_create(serializer)
+        except AccountExistInDB :
+            return JsonResponse({'msg' : 'AccountExistInDB'}, status=400)
+        except PhoneNumberExistInDB :
+            return JsonResponse({'msg' : 'PhoneNumberExistInDB'}, status=400)    
         except IntegrityError:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         return redirect('/')
@@ -217,7 +260,7 @@ class CouponUsing(generics.RetrieveUpdateAPIView):
         try:
             self.perform_update(serializer)
         except ValueError :
-            JsonResponse({'msg': 'ValueError'}, status=400)
+            return JsonResponse({'msg': 'ValueError'}, status=400)
         except StampInsufficient:
             return JsonResponse({'msg': 'StampInsufficient'}, status=400)
 

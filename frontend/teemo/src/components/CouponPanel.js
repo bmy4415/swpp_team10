@@ -2,43 +2,76 @@ import React, { Component } from 'react';
 import Stamp from './Stamp.js';
 import { Grid } from 'semantic-ui-react';
 
-class CouponPanel extends Component {
-	
+class CouponPanel extends Component {	
 	render() {
-		let stampArray = new Array();
-		for (var i = 1; i <= 10; i++) {
-			if(i<=this.props.statefunction.stampCount) // this must be set when logged in
-			{
-				stampArray[i-1] = true;
-			}
-			else
-			{
-				stampArray[i-1] = false;
-			}
-		}
-		let sndRows = stampArray.splice(1,5);
-		let fstRows = stampArray;
-		let key=0;
-		return (
+		if(this.props.stampCount === undefined)
+		{
+			return(
 			<div className="CouponPanel">
 				<Grid>
-					<Grid.Row columns={5}>
-			{ sndRows.map(b =>
-						<Grid.Column key={key++}>
-							<Stamp isStamped={b} key={key++}/>
-						</Grid.Column>
-			) }
-					</Grid.Row>
-					<Grid.Row columns={5}>
-			{ fstRows.map(b =>
-						<Grid.Column key={key++}>
-							<Stamp isStamped={b} key={key++}/>
-						</Grid.Column>
-			) }
-					</Grid.Row>
+					<h1> The Customer has no coupon </h1>
 				</Grid>
-			</div>
-		);
+			</div>)
+		}
+		else
+		{
+			/* CAUTION
+			 * below code is quite dirty
+			 */
+			
+			let filledRowCount = parseInt(this.props.stampCount/5, 10);
+			let rest = this.props.stampCount%5
+			let key=0;
+
+			let filledRows = [];
+				
+			for (let i=0; i<filledRowCount; i++) {
+				let columns = [];
+				for (let j=0; j<5; j++){
+					columns.push(
+						<Grid.Column key={key++}>
+							<Stamp isStamped={true} key={key++} onClickStamp={this.props.onClickStamp}/>
+						</Grid.Column>
+					)
+				}
+				filledRows.push(
+					<Grid.Row columns={5} key={key++}>
+						{columns}
+					</Grid.Row>
+				)
+			}
+
+			let unfilledRow = [];
+			let columns = [];
+			for (let i=0; i<rest; i++) {
+				columns.push(
+						<Grid.Column key={key++}>
+							<Stamp isStamped={true} key={key++} onClickStamp={this.props.onClickStamp}/>
+						</Grid.Column>
+					)
+			}
+			for (let i=0; i<5-rest; i++) {
+				columns.push(
+						<Grid.Column key={key++}>
+							<Stamp isStamped={false} key={key++} onClickStamp={this.props.onClickStamp}/>
+						</Grid.Column>
+					)
+			}
+			unfilledRow.push(
+				<Grid.Row columns={5} key={key++}>
+					{columns}
+				</Grid.Row>
+			)
+		
+			return (
+				<div className="CouponPanel">
+				<Grid>
+					{filledRows}	
+					{unfilledRow}
+				</Grid>
+				</div>
+			);
+		}
 	}
 }
 

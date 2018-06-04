@@ -10,6 +10,16 @@ const reducer = (state = initialState, action) => {
 			});
 		case "LOGOUT":
 			return initialState;
+		case "SET_SEARCH_RESULT":
+			return Object.assign({}, state, {
+				queryCouponId : action.queryCouponId,
+				searchedStampCount : action.searchedStampCount,
+				queryCustomerAccount : action.queryCustomerAccount,
+			});
+		case "SET_CUSTOMER_COUPON_LIST":
+			return Object.assign({}, state, {
+				customerCouponList : action.couponList,
+			});
 
 		default:
 			return state;
