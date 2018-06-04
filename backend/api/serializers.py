@@ -4,6 +4,7 @@ from api.models import Customer, Store, Coupon, Has_coupon
 class CustomerSerializer(serializers.ModelSerializer):
     account = serializers.CharField(source='user.username')
     password = serializers.CharField(source='user.password')
+    phone_number = serializers.CharField()
     class Meta:
         model = Customer
         fields = ('id', 'account', 'password', 'phone_number')
@@ -11,6 +12,7 @@ class CustomerSerializer(serializers.ModelSerializer):
 class StoreSerializer(serializers.ModelSerializer):
     account = serializers.CharField(source='user.username')
     password = serializers.CharField(source='user.password')
+    phone_number = serializers.CharField()
     class Meta:
         model = Store
         fields = ('id', 'account', 'password', 'phone_number', 'address', 'name')
