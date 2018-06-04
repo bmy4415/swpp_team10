@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, Button, Grid, Container } from 'semantic-ui-react'
+import { Form, Button, Grid, Container, Message } from 'semantic-ui-react'
 import { Redirect } from 'react-router-dom'
 import cookie from 'react-cookies';
 import axios from 'axios';
@@ -12,6 +12,7 @@ class SignUpStorePage extends Component {
 		phoneNumber:'',
 		address:'',
 		storeName:'',
+		message: '',
 	}
 
 
@@ -51,13 +52,22 @@ class SignUpStorePage extends Component {
 					if (err) {
 						const msg = err.response.data.msg;
 						if (msg === 'AccountExistInDB') {
-							alert('Account already exists, use another one');
-							this.setState({ id: '' });
+							const client_message = 'Account already exists, use another one';
+							alert(client_message);
+							this.setState({ 
+								id: '', 
+								message: client_message,
+							});
 						} else if (msg === 'PhoneNumberExistInDB') {
-							alert('PhoneNumber already exists, use another one');
-							this.setState({ phoneNumber: '' });
+							const client_message = 'PhoneNumber already exists, use another one';
+							alert(client_message);
+							this.setState({ 
+								phoneNumber: '',
+								message: client_message,
+							});
 						} else {
 							alert('Some error happens, try later');
+							this.setState({ message: 'Try again' });
 						}
 						return;
 					}
@@ -70,6 +80,7 @@ class SignUpStorePage extends Component {
 						phoneNumber: '',
 						address: '',
 						storeName: '',
+						message: '',
 					});
 					this.props.history.push("/");
 				});
@@ -114,41 +125,44 @@ class SignUpStorePage extends Component {
 
 		return (
 			<div className="SignUpStorePage">
-			<Container>
-			<Grid>
-			<Grid.Row centered>
-			<Grid.Column width={6}>
-			<h2>Sign up customer</h2>
-			<Form onSubmit={this.onSubmitSignUp}>
-			<Form.Field>
-			<Form.Input type="text" onChange = {this.captureId} value={this.state.id} label="Account" placeholder="honggildong"/>
-			</Form.Field>
-			<Form.Field>
-			<Form.Input type="password" onChange = {this.capturePassword} value={this.state.password} label="Password" placeholder="Your password"/>
-			</Form.Field>
-			<Form.Field>
-			<Form.Input type="password" onChange = {this.capturePasswordCheck} value={this.state.passwordCheck} label="Password check" placeholder="Your password again"/>
-			</Form.Field>
-			<Form.Field>
-			<Form.Input type="text" onChange = {this.captureAddress} value={this.state.address} label="Address" placeholder="서울특별시 관악구 대학동 산 56"/>
-			</Form.Field>
-			<Form.Field>
-			<Form.Input type="text" onChange = {this.captureStoreName} value={this.state.storeName} label="Store Name" placeholder="수타벅수"/>
-			</Form.Field>
-			<Form.Field>
-			<Form.Input type="text" onChange = {this.capturePhoneNumber} value={this.state.phoneNumber} label="Phone Number" placeholder="01012345678"/>
-			</Form.Field>
-			<Button type='submit' content={"Sign up"}/>
-			</Form>
-			<br/>
-			<br/>
-			</Grid.Column>
-			</Grid.Row>
-			</Grid>
-			<Grid>
-			<h1> { this.state.message } </h1>
-			</Grid>
-			</Container>
+				<Container>
+					<Grid>
+						<Grid.Row centered>
+							<Grid.Column width={6}>
+							<h2>Sign up customer</h2>
+							<Form onSubmit={this.onSubmitSignUp}>
+								<Form.Field>
+								<Form.Input type="text" onChange = {this.captureId} value={this.state.id} label="Account" placeholder="honggildong"/>
+								</Form.Field>
+								<Form.Field>
+								<Form.Input type="password" onChange = {this.capturePassword} value={this.state.password} label="Password" placeholder="Your password"/>
+								</Form.Field>
+								<Form.Field>
+								<Form.Input type="password" onChange = {this.capturePasswordCheck} value={this.state.passwordCheck} label="Password check" placeholder="Your password again"/>
+								</Form.Field>
+								<Form.Field>
+								<Form.Input type="text" onChange = {this.captureAddress} value={this.state.address} label="Address" placeholder="서울특별시 관악구 대학동 산 56"/>
+								</Form.Field>
+								<Form.Field>
+								<Form.Input type="text" onChange = {this.captureStoreName} value={this.state.storeName} label="Store Name" placeholder="수타벅수"/>
+								</Form.Field>
+								<Form.Field>
+								<Form.Input type="text" onChange = {this.capturePhoneNumber} value={this.state.phoneNumber} label="Phone Number" placeholder="01012345678"/>
+								</Form.Field>
+								<Button type='submit' content={"Sign up"}/>
+
+							</Form>
+							
+							{ this.state.message ?
+								<Message color='pink' size='large'>
+								{this.state.message}
+								</Message>
+								: null
+							}
+							</Grid.Column>
+						</Grid.Row>
+					</Grid>
+				</Container>
 			</div>
 		);
 	}

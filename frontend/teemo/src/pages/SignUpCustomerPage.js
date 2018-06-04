@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, Button, Grid, Container } from 'semantic-ui-react'
+import { Form, Button, Grid, Container, Message } from 'semantic-ui-react'
 import { Redirect } from 'react-router-dom'
 import cookie from 'react-cookies';
 import axios from 'axios';
@@ -10,6 +10,7 @@ class SignUpCustomerPage extends Component {
 		password:'',
 		passwordCheck:'',
 		phoneNumber:'',
+		message: '',
 	}
 
 	onSubmitSignUp = (event) => {
@@ -48,13 +49,22 @@ class SignUpCustomerPage extends Component {
 					if (err) {
 						const msg = err.response.data.msg;
 						if (msg === 'AccountExistInDB') {
-							alert('Account already exists, use another one');
-							this.setState({ id: '' });
+							const client_message = 'Account already exists, use another one';
+							alert(client_message);
+							this.setState({ 
+								id: '',
+								message: client_message,
+							});
 						} else if (msg === 'PhoneNumberExistInDB') {
-							alert('PhoneNumber already exists, use another one');
-							this.setState({ phoneNumber: '' });
+							const client_message = 'PhoneNumber already exists, use another one';
+							alert(client_message);
+							this.setState({ 
+								phoneNumber: '',
+								message: client_message,
+							});
 						} else {
 							alert('Some error happens, try later');
+							this.setState({ message: 'Try again' });
 						}
 						return;
 					}
@@ -65,6 +75,7 @@ class SignUpCustomerPage extends Component {
 						password: '',
 						passwordCheck: '',
 						phoneNumber: '',
+						message: '',
 					});
 					this.props.history.push("/");
 				});
@@ -119,13 +130,14 @@ class SignUpCustomerPage extends Component {
 									</Form.Field>
 									<Button type='submit' content={"Sign up"}/>
 								</Form>
-								<br/>
-								<br/>
+								{ this.state.message ?
+									<Message color='pink' size='large'>
+									{this.state.message}
+									</Message>
+									: null
+								}
 							</Grid.Column>
 						</Grid.Row>
-					</Grid>
-					<Grid>
-						<h1> {this.state.message} </h1>
 					</Grid>
 				</Container>
 			</div>
