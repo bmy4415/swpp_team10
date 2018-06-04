@@ -56,7 +56,7 @@ class SignUpStorePage extends Component {
 			body: JSON.stringify({
 				account: this.state.id,
 				password: this.state.password,
-				phone_number: this.state.phoneNumber,
+				phone_number: this.state.phoneNumber.replace(/-/gi,''),
 				address: this.state.address,
 				name: this.state.storeName,
 			}),

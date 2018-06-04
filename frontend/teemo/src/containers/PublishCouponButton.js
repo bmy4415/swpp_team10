@@ -1,4 +1,4 @@
-import StorePage from '../pages/StorePage.js'
+import PublishCouponButton from '../components/PublishCouponButton.js'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import { setSearchResult } from '../store/actions.js'
@@ -17,4 +17,4 @@ const mapDispatchToProps = (dispatch) => {
 	}
 }
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(StorePage));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(PublishCouponButton));

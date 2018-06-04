@@ -52,7 +52,7 @@ class SignUpCustomerPage extends Component {
 			body: JSON.stringify({
 				account: this.state.id,
 				password: this.state.password,
-				phone_number: this.state.phoneNumber,
+				phone_number: this.state.phoneNumber.replace(/-/gi,''),
 			}),
 			credentials: 'include',
 		}).then((response) => {
