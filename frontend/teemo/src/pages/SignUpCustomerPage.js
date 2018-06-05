@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { Form, Button, Grid, Container, Message } from 'semantic-ui-react'
+import { Form, Button, Grid, Container } from 'semantic-ui-react'
 import { Redirect } from 'react-router-dom'
 import cookie from 'react-cookies';
 import axios from 'axios';
+import ErrorMessageBar from '../components/ErrorMessageBar';
 
 
 /* GLOBAL VARIBALES */
@@ -140,12 +141,10 @@ class SignUpCustomerPage extends Component {
 									</Form.Field>
 									<Button type='submit' content={"Sign up"}/>
 								</Form>
-								{ this.state.message ?
-									<Message color='pink' size='large'>
-									{this.state.message}
-									</Message>
-									: null
-								}
+			
+								<br/>
+
+								<ErrorMessageBar message={this.state.message} />
 							</Grid.Column>
 						</Grid.Row>
 					</Grid>
@@ -156,6 +155,12 @@ class SignUpCustomerPage extends Component {
 }
 
 
+								// { this.state.message ?
+								//     <Message color='pink' size='large'>
+								//     {this.state.message}
+								//     </Message>
+								//     : null
+								// }
 
 /**
  *	Check signup form

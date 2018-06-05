@@ -3,6 +3,7 @@ import { Form, Button, Grid, Container, Message } from 'semantic-ui-react'
 import { Redirect } from 'react-router-dom'
 import cookie from 'react-cookies';
 import axios from 'axios';
+import ErrorMessageBar from '../components/ErrorMessageBar';
 
 
 /* GLOBAL VARIBALES */
@@ -163,12 +164,9 @@ class SignUpStorePage extends Component {
 
 							</Form>
 							
-							{ this.state.message ?
-								<Message color='pink' size='large'>
-								{this.state.message}
-								</Message>
-								: null
-							}
+							<br/>
+
+							<ErrorMessageBar message={this.state.message} />
 							</Grid.Column>
 						</Grid.Row>
 					</Grid>
