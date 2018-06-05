@@ -268,7 +268,7 @@ class CouponUsing(generics.RetrieveUpdateAPIView):
             # If 'prefetch_related' has been applied to a queryset, we need to
             # forcibly invalidate the prefetch cache on the instance.
             instance._prefetched_objects_cache = {}
-
+        print(serializer.data)
         return Response(serializer.data)
 
 class CouponGiving(generics.RetrieveUpdateAPIView):
@@ -361,4 +361,6 @@ class CouponGiving(generics.RetrieveUpdateAPIView):
             # forcibly invalidate the prefetch cache on the instance.
             instance._prefetched_objects_cache = {}
 
+        result = Coupon.objects.get(id=serializer.data['id'])
+        serializer = self.get_serializer(result)
         return Response(serializer.data)
