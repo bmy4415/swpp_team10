@@ -4,6 +4,12 @@ import { Redirect } from 'react-router-dom'
 import cookie from 'react-cookies';
 import axios from 'axios';
 
+
+/* GLOBAL VARIBALES */
+const FILL_MESSAGE = 'Please fill all fields';
+const PASSWORD_MESSAGE = 'Password should be same';
+const PHONE_NUMBER_MESSAGE = 'Write correct phone number';
+
 class SignUpStorePage extends Component {
 	state = {
 		id:'',
@@ -22,24 +28,27 @@ class SignUpStorePage extends Component {
 		// Check sign up forms
 		const result = checkSignUpForm(this.state);
 
-		if (result === 'Please fill all fields') {
-			alert('Please fill all fields');
+		if (result === FILL_MESSAGE) {
+			// alert('Please fill all fields');
+			this.setState({ message: FILL_MESSAGE });
 			return;
 		}
 
-		if (result === 'Check your password again') {
-			alert('Check your password again');
-			this.setState({
+		if (result === PASSWORD_MESSAGE) {
+			// alert('Check your password again');
+			this.setState({ 
 				password: '',
 				passwordCheck: '',
+				message: PASSWORD_MESSAGE,
 			});
 			return;
 		} 
 
-		if (result === 'Check your phone number format') {
-			alert('Check your phone number format');
+		if (result === PHONE_NUMBER_MESSAGE) {
+			// alert('Check your phone number format');
 			this.setState({
 				phoneNumber: '',
+				message: PHONE_NUMBER_MESSAGE,
 			});
 			return;
 		}
@@ -53,20 +62,20 @@ class SignUpStorePage extends Component {
 						const msg = err.response.data.msg;
 						if (msg === 'AccountExistInDB') {
 							const client_message = 'Account already exists, use another one';
-							alert(client_message);
+							// alert(client_message);
 							this.setState({ 
 								id: '', 
 								message: client_message,
 							});
 						} else if (msg === 'PhoneNumberExistInDB') {
 							const client_message = 'PhoneNumber already exists, use another one';
-							alert(client_message);
+							// alert(client_message);
 							this.setState({ 
 								phoneNumber: '',
 								message: client_message,
 							});
 						} else {
-							alert('Some error happens, try later');
+							// alert('Some error happens, try later');
 							this.setState({ message: 'Try again' });
 						}
 						return;
@@ -82,6 +91,7 @@ class SignUpStorePage extends Component {
 						storeName: '',
 						message: '',
 					});
+					alert('Sign up success!');
 					this.props.history.push("/");
 				});
 		} // if - valid
@@ -180,15 +190,15 @@ function checkSignUpForm(state) {
 
 	// if there exists empty fields
 	if(!id || !password || !passwordCheck || !phoneNumber || !address || !storeName) {
-		return 'Please fill all fields';
+		return FILL_MESSAGE;
 	}
 
 	if(password !== passwordCheck) {
-		return 'Check your password again';
+		return PASSWORD_MESSAGE;
 	}
 
 	if(!regExp.test(phoneNumber)) {
-		return 'Check your phone number format';
+		return PHONE_NUMBER_MESSAGE;
 	}
 
 	return 'valid';
@@ -212,7 +222,7 @@ function callSignUpApi(id, password, phoneNumber, address, storeName) {
 		data: JSON.stringify({
 			account: id,
 			password: password,
-			phone_number: phoneNumber,
+			phone_number: phoneNumber.replace(/-/gi, ''),
 			address,
 			name: storeName,
 		}),
