@@ -2,6 +2,14 @@ import React, { Component } from 'react';
 import { Form, Button, Grid, Container } from 'semantic-ui-react'
 import { Redirect } from 'react-router-dom'
 import cookie from 'react-cookies';
+import axios from 'axios';
+import ErrorMessageBar from '../components/ErrorMessageBar';
+
+
+/* GLOBAL VARIBALES */
+const FILL_MESSAGE = 'Please fill all fields';
+const PASSWORD_MESSAGE = 'Password should be same';
+const PHONE_NUMBER_MESSAGE = 'Write correct phone number';
 
 class SignUpCustomerPage extends Component {
 	state = {
@@ -9,81 +17,83 @@ class SignUpCustomerPage extends Component {
 		password:'',
 		passwordCheck:'',
 		phoneNumber:'',
-		message:undefined,
+		message: '',
 	}
 
-	onSubmitSignUp = ((event) => {
+	onSubmitSignUp = (event) => {
 		event.preventDefault();
-		let regExp = /^01[016789]{1}-?[0-9]{3,4}-?[0-9]{4}$/;
+
 		// Check sign up forms 
-		if(Object.values(this.state).find((value)=>{
-			return value==='';	
-		})!==undefined) // if there exists empty input field
-		{
-			this.setState({
-				message:"Please fill all fields",
-			});
-			alert("Please fill all fields");
+		const result = checkSignUpForm(this.state);
+
+		if (result === FILL_MESSAGE) {
+			// alert('Please fill all fields');
+			this.setState({ message: FILL_MESSAGE });
 			return;
 		}
-		else if(this.state.password !== this.state.passwordCheck)
-		{
-			this.setState({
+
+		if (result === PASSWORD_MESSAGE) {
+			// alert('Check your password again');
+			this.setState({ 
 				password: '',
 				passwordCheck: '',
-				message:"Check your password again",
+				message: PASSWORD_MESSAGE,
 			});
 			alert("Password is not identical to password check");
 			return;
-		}
-		else if(!regExp.test(this.state.phoneNumber))
-		{
+		} 
+
+		if (result === PHONE_NUMBER_MESSAGE) {
+			// alert('Check your phone number format');
 			this.setState({
-				phoneNumber:'',
-				message:"Check your phone number format",
+				phoneNumber: '',
+				message: PHONE_NUMBER_MESSAGE,
 			});
 			alert("Check your phone number format");
 			return;
 		}
-		fetch("http://localhost:8000/api/customer_sign_up/", {
-			method: 'POST',
-			headers: {
-				'Accept' : 'application/json',
-				'Content-Type' : 'application/json',
-				'X-CSRFToken' : cookie.load('csrftoken'),
-			},
-			body: JSON.stringify({
-				account: this.state.id,
-				password: this.state.password,
-				phone_number: this.state.phoneNumber.replace(/-/gi,''),
-			}),
-			credentials: 'include',
-		}).then((response) => {
-			console.log(response);
-			if(response.ok)
-			{
-				this.setState({
-					id:'',
-					password:'',
-					passwordCheck:'',
-					phoneNumber:'',
-					message:undefined});
-				this.props.history.push("/");
-			}
-			else
-			{
-				throw Error(response.statusText);
-			}
-		}).catch((err) => {
-			this.setState({
-				id: '',
-				message: "Account already exist"
-			});
-			alert("Account or phone number already exist." + "\nerr: " + err.msg);
-			return;
-		})
-	}) 
-	
+
+		if (result === 'valid') {
+			// valid form, try to signup
+			const { id, password, phoneNumber } = this.state;
+			callSignUpApi(id, password, phoneNumber)
+				.then(({ err, response }) => {
+					if (err) {
+						const msg = err.response.data.msg;
+						if (msg === 'AccountExistInDB') {
+							const client_message = 'Account already exists, use another one';
+							// alert(client_message);
+							this.setState({ 
+								id: '',
+								message: client_message,
+							});
+						} else if (msg === 'PhoneNumberExistInDB') {
+							const client_message = 'PhoneNumber already exists, use another one';
+							// alert(client_message);
+							this.setState({ 
+								phoneNumber: '',
+								message: client_message,
+							});
+						} else {
+							// alert('Some error happens, try later');
+							this.setState({ message: 'Try again' });
+						}
+						return;
+					}
+
+					// signup success
+					this.setState({
+						id: '',
+						password: '',
+						passwordCheck: '',
+						phoneNumber: '',
+						message: '',
+					});
+					alert('Sign up success!');
+					this.props.history.push("/");
+				});
+		} // if - valid
+	}	
 
     captureId = (event) => {
 		event.preventDefault();
@@ -132,18 +142,101 @@ class SignUpCustomerPage extends Component {
 									</Form.Field>
 									<Button type='submit' content={"Sign up"}/>
 								</Form>
+			
 								<br/>
-								<br/>
+
+								<ErrorMessageBar message={this.state.message} />
 							</Grid.Column>
 						</Grid.Row>
-					</Grid>
-					<Grid>
-						<h1> {this.state.message} </h1>
 					</Grid>
 				</Container>
 			</div>
 		);
 	}
+}
+
+
+								// { this.state.message ?
+								//     <Message color='pink' size='large'>
+								//     {this.state.message}
+								//     </Message>
+								//     : null
+								// }
+
+/**
+ *	Check signup form
+ *	if signup form is valid, return 'valid'
+ *	if signup form is not valid, return corresponding message
+ */
+function checkSignUpForm(state) {
+	const { id, password, passwordCheck, phoneNumber } = state;
+	const regExp = /^01[016789]{1}-?[0-9]{3,4}-?[0-9]{4}$/;
+
+	// if there exists empty fields
+	if(!id || !password || !passwordCheck || !phoneNumber) {
+		return FILL_MESSAGE;
+	}
+
+	if(password !== passwordCheck) {
+		return PASSWORD_MESSAGE;
+	}
+
+	if(!regExp.test(phoneNumber)) {
+		return PHONE_NUMBER_MESSAGE;
+	}
+
+	return 'valid';
+}
+
+/**
+ *	Call sign up api
+ *	길어서 밑으로 뺐음
+ *
+ *	return	Promise	promise that resolves error and response
+ */
+function callSignUpApi(id, password, phoneNumber) {
+	const options = {
+		method: 'POST',
+		url: 'http://localhost:8000/api/customer_sign_up/',
+		headers: {
+			'Accept' : 'application/json',
+			'Content-Type' : 'application/json',
+			'X-CSRFToken' : cookie.load('csrftoken'),
+		},
+		data: JSON.stringify({
+			account: id,
+			password: password,
+			phone_number: phoneNumber.replace(/-/gi, ''),
+		}),
+		withCredentials: true,
+	};
+
+	return axios(options)
+		.then((response) => {
+			return { err: null, response };
+		}).catch((err) => {
+			return { err, response: null };
+		});
+
+	// return fetch("http://localhost:8000/api/customer_sign_up/", {
+	//     method: 'POST',
+	//     headers: {
+	//         'Accept' : 'application/json',
+	//         'Content-Type' : 'application/json',
+	//         'X-CSRFToken' : cookie.load('csrftoken'),
+	//     },
+	//     body: JSON.stringify({
+	//         account: id,
+	//         password: password,
+	//         phone_number: phoneNumber,
+	//     }),
+	//     credentials: 'include',
+	// }).then((response) => {
+	//     return { err: null, response };
+	// }).catch((err) => {
+	//     return { err, response: null };
+	// })
+
 }
 
 export default SignUpCustomerPage;
