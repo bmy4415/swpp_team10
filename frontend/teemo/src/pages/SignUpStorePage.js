@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, Button, Grid, Container, Message } from 'semantic-ui-react'
+import { Form, Button, Grid, Container } from 'semantic-ui-react'
 import { Redirect } from 'react-router-dom'
 import cookie from 'react-cookies';
 import axios from 'axios';

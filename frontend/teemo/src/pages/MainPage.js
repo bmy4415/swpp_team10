@@ -2,12 +2,16 @@ import React, { Component } from 'react';
 import { Form, Button, Grid, Container } from 'semantic-ui-react';
 import { Redirect, Link } from 'react-router-dom';
 import cookie from 'react-cookies';
+import ErrorMessageBar from '../components/ErrorMessageBar';
+
+
+const LOGIN_FAIL_MESSAGE = 'Login failed, check your account and/or password';
 
 class MainPage extends Component {
 	state = {
-		id:'',
-		password:'',
-		loginFailed:false,
+		id: '',
+		password: '',
+		message: '',
 	}
 
 	onSubmitLogin = ((event) => {
@@ -23,61 +27,58 @@ class MainPage extends Component {
 			},
 			body: formData, 
 			credentials: 'include',
-		}).then((response) =>
-		{
+		}).then((response) => {
 			response.json()
 				.then((json)=>{
-					console.log("login success");
-					if(json.is_customer === "True")
-					{	
+					// login success
+					if (json.is_customer === "True") {	
 						this.setState({
 							id: '',
 							password: '',
-							loginFailed: false,
+							message: '',
 						});
 						this.props.onLoginPassed(this.state.id, "customer");
 					}
-					else
-					{
+					else {
 						this.setState({
 							id: '',
 							password: '',
-							loginFailed: false,
+							message: '',
 						});
 						this.props.onLoginPassed(this.state.id, "store");
 					}
-				})
-				.catch(()=>{
-					console.log("login failed")
+				}).catch(()=>{
+					// login failed
 					this.setState({
 						id: '',
 						password: '',
-						loginFailed: true,
+						message: LOGIN_FAIL_MESSAGE,
 					});
 				});
 		})
-			
+
 	})
-	
 
-    captureId = (event) => {
+
+	captureId = (event) => {
 		event.preventDefault();
-        this.setState({id : event.target.value});
-    }   
+		this.setState({id : event.target.value});
+	}   
 
-    capturePassword = (event) => {
+	capturePassword = (event) => {
 		event.preventDefault();
         this.setState({password : event.target.value});
     }   
 
 	render() {
-		  if(this.props.statefunction.isLoggedIn)
-		  {
-			  if(this.props.statefunction.loggedInUserType === 'customer')
-				  return <Redirect to="/Customer"/>
-			  else
-				  return <Redirect to="/Store"/>
-		  }
+		if (this.props.statefunction.isLoggedIn && this.props.statefunction.loggedInUserType === 'customer') {
+			return <Redirect to="/Customer"/>
+		}
+
+		if (this.props.statefunction.isLoggedIn && this.props.statefunction.loggedInUserType === 'store') {
+			return <Redirect to="/Store"/>
+		}
+
 		return (
 			<div className="MainPage">
 				<Container>
@@ -94,24 +95,24 @@ class MainPage extends Component {
 									</Form.Field>
 									<Form.Button type='submit' content={"Sign in"}/>
 								</Form>
+
 								<br/>
-								<br/>
+
 								<Link to="/SignUpCustomer">
 									<Button content="Sign up(customer)"/>
 								</Link>
+
 								<Link to="/SignUpStore">
 									<Button content="Sign up(store)"/>
 								</Link>
+		
+								<br/>
+								<br/>
+								<ErrorMessageBar message={this.state.message} />
 							</Grid.Column>
 						</Grid.Row>
 					</Grid>
 				</Container>
-				<Grid>
-					{this.state.loginFailed 
-						?
-						<h1> Please check your account and password again </h1>
-						:null}
-				</Grid>
 			</div>
 		);
 	}
