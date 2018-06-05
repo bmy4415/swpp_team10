@@ -42,6 +42,7 @@ class SignUpStorePage extends Component {
 				passwordCheck: '',
 				message: PASSWORD_MESSAGE,
 			});
+			alert("Password is not identical to password check");
 			return;
 		} 
 
@@ -51,9 +52,9 @@ class SignUpStorePage extends Component {
 				phoneNumber: '',
 				message: PHONE_NUMBER_MESSAGE,
 			});
+			alert("Check your phone number format");
 			return;
 		}
-
 		if (result === 'valid') {
 			// valid form, try to signup
 			const { id, password, phoneNumber, address, storeName } = this.state;

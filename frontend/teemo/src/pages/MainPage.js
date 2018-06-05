@@ -27,6 +27,7 @@ class MainPage extends Component {
 			},
 			body: formData, 
 			credentials: 'include',
+
 		}).then((response) => {
 			response.json()
 				.then((json)=>{
@@ -54,7 +55,10 @@ class MainPage extends Component {
 						password: '',
 						message: LOGIN_FAIL_MESSAGE,
 					});
+					alert("Check your account or password");
 				});
+		}).catch((err) => {
+			alert("Unknown error has occured. Please try again.");
 		})
 
 	})

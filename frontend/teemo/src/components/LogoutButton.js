@@ -13,8 +13,10 @@ class LogoutButton extends Component {
 			credentials: 'include',
 		}).then((response) =>
 		{
-			if(!response.ok)
+			if(!response.ok) {
 				console.log("logout failed");
+				alert("logout failed..");
+			}
 			else
 			{
 				this.props.onLogout();

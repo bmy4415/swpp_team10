@@ -39,6 +39,7 @@ class SignUpCustomerPage extends Component {
 				passwordCheck: '',
 				message: PASSWORD_MESSAGE,
 			});
+			alert("Password is not identical to password check");
 			return;
 		} 
 
@@ -48,6 +49,7 @@ class SignUpCustomerPage extends Component {
 				phoneNumber: '',
 				message: PHONE_NUMBER_MESSAGE,
 			});
+			alert("Check your phone number format");
 			return;
 		}
 
@@ -91,8 +93,7 @@ class SignUpCustomerPage extends Component {
 					this.props.history.push("/");
 				});
 		} // if - valid
-	}
-	
+	}	
 
     captureId = (event) => {
 		event.preventDefault();
