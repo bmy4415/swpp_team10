@@ -3,46 +3,18 @@ import { Redirect } from 'react-router-dom';
 import CouponPanel from '../containers/CouponPanel.js';
 import LogoutButton from '../containers/LogoutButton.js';
 import cookie from 'react-cookies';
+import axios from 'axios';
 
 class CustomerPage extends Component {
 	
 	// To make fetch call automatically
 	// when react start rendering this page
 	componentDidMount() {
-		fetch("http://localhost:8000/api/coupon_list_of_customer/", {
-			method: 'GET',
-			headers: {
-				'Accept' : 'application/json',
-				'Content-Type' : 'application/json',
-				'X-CSRFToken' : cookie.load('csrftoken'),
-			},
-			credentials: 'include',
-		}).then((response) => {
-			console.log(response);
-			if(response.ok)
-			{
-				response.json().then((array)=>{
-					let searchResult = array.map((cursor)=>{
-						return {
-							couponId: cursor.coupon.id,
-							storeName: cursor.coupon.store.name,
-							stampCount: cursor.coupon.stamp_count,
-						}
-					})
-					//this.props.onSetCustomerCouponList(searchResult);	
-					this.setState ({
-						searchResult: searchResult,
-					})
-				})
-			}
-			else
-			{
-				throw Error(response.statusText);
-			}
-		}).catch((err) => {
-			console.log("coupon_list_of_customer error");
-			return;
-		})
+		getCouponList()
+			.then(({ err, response }) => {
+				if (err) console.log(err);
+				else console.log(response);
+			});
 	}
 
 	render() {
@@ -75,6 +47,57 @@ class CustomerPage extends Component {
 			</div>
 		);
 	}
+}
+
+function getCouponList() {
+	const options = {
+		method: 'GET',
+		url: 'http://localhost:8000/api/coupon_list_of_customer/',
+		headers: {
+			'Accept' : 'application/json',
+			'Content-Type' : 'application/json',
+			'X-CSRFToken' : cookie.load('csrftoken'),
+		},
+		withCredentials: true,
+	};
+
+	return axios(options)
+		.then((response) => {
+			return { err: null, response };
+		}).catch((err) => {
+			return { err, response: null };
+		});
+		// fetch("http://localhost:8000/api/coupon_list_of_customer/", {
+		//     method: 'GET',
+		//     credentials: 'include',
+		// }).then((response) => {
+		//     console.log(response);
+		//     if(response.ok)
+		//     {
+		//         response.json().then((array)=>{
+		//             console.log(array);
+		//             let searchResult = array.map((cursor)=>{
+		//                 return {
+		//                     couponId: cursor.coupon.id,
+		//                     storeName: cursor.coupon.store.name,
+		//                     stampCount: cursor.coupon.stamp_count,
+		//                 }
+		//             })
+		//             //this.props.onSetCustomerCouponList(searchResult);
+		//             this.setState ({
+		//                 searchResult: searchResult,
+		//             })
+		//         })
+		//     }
+		//     else
+		//     {
+		//         throw Error(response.statusText);
+		//     }
+		// }).catch((err) => {
+		//     console.log("coupon_list_of_customer error");
+		//     return;
+		// })
+
 }
 
 export default CustomerPage;
