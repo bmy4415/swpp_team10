@@ -140,7 +140,7 @@ class SignUpStorePage extends Component {
 					<Grid>
 						<Grid.Row centered>
 							<Grid.Column width={6}>
-							<h2>Sign up customer</h2>
+							<h2>Sign up store</h2>
 							<Form onSubmit={this.onSubmitSignUp}>
 								<Form.Field>
 								<Form.Input type="text" onChange = {this.captureId} value={this.state.id} label="Account" placeholder="honggildong"/>
