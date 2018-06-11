@@ -38,6 +38,16 @@ class CustomerPage extends Component {
 			});
 	}
 
+	onClickCoupon(couponID) {
+		console.log("Click Coupon");
+		if(this.state.targetCouponID === '') {
+			this.state.targetCouponID = couponID
+		}
+		else {
+			this.state.targetCouponID = ''
+		}
+	}	
+
 	render() {
 		if (!this.props.statefunction.isLoggedIn) {
 			return <Redirect to="/"/>
@@ -54,7 +64,7 @@ class CustomerPage extends Component {
 //     ))}
 //   </div>
 // )
-		// console.log(this.state.couponList);
+		 //console.log(this.state.couponList);
 		return (
 			<Container textAlign='center'>
 			<LogoutButton/>
@@ -73,8 +83,9 @@ class CustomerPage extends Component {
 					<Grid.Column>
 						{this.state.couponList ?
 						this.state.couponList.map(coupon => (
-							<Segment key={Math.random()}>
+							<Segment key={Math.random()} onClick={(e) => this.onClickCoupon(coupon.coupon.id, e)}>
 								{`[id: ${coupon.coupon.id}] [account: ${coupon.coupon.store.account}] [address: ${coupon.coupon.store.address}] [stamp_count: ${coupon.coupon.stamp_count}]`}
+							<CouponPanel stampCount={coupon.coupon.stamp_count} onClickStamp={err => err}/>
 							</Segment>
 						))
 						: null}
