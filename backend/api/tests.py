@@ -1,7 +1,7 @@
 from django.test import TestCase, RequestFactory
 from .models import Customer, Store, Coupon
 from django.contrib.auth.models import User
-from .views import CouponPublishing, CouponListOfCustomer, CouponListOfStore, CouponStamping
+from .views import CouponPublishing, CouponListOfCustomer, CouponListOfStore, CouponStamping, CouponUsing
 from django.urls import reverse
 
 # Create your tests here.
@@ -66,7 +66,7 @@ class CouponTests(TestCase):
     username = "testuser"
     password = "test123user"
     url = "/api/login/"
-    phone_number = "101011013"
+    phone_number = "01001011013"
     store_name = "storename"
     address = "address"
 
@@ -84,13 +84,63 @@ class CouponTests(TestCase):
 
         create_result = create_store(self, "store", self.password, self.phone_number, self.address, self.store_name)
 
-        create_result = create_customer(self, "customer", self.password, self.phone_number)
+        create_result = create_customer(self, "customer", self.password, "01030615135")
 
         request = self.factory.post('/api/coupon_publishing/', {"customer" : "customer"})
         request.user = Store.objects.get(phone_number=self.phone_number).user
         response = CouponPublishing.as_view()(request)
+
         self.assertEqual(response.status_code, 403)
-  
+     
+    # check coupon using
+    def test_coupon_using(self):
+        global i
+        i=i+1
+        print("\n{}. Test coupon using...".format(i))
+
+
+        create_result = create_store(self, "store", self.password, self.phone_number, self.address, self.store_name)
+
+        create_result = create_customer(self, "customer", self.password, "01030615135")
+
+        request = self.factory.post('/api/coupon_publishing/', {"customer" : "customer"})
+        request.user = Store.objects.get(phone_number=self.phone_number).user
+        response = CouponPublishing.as_view()(request)
+
+        request = self.factory.post('/api/coupon_using/1', {"stamp_count" : "1"})
+        request.user = Store.objects.get(phone_number=self.phone_number).user
+        response = CouponUsing.as_view()(request)       
+
+        self.assertEqual(response.status_code, 403)
+
+     
+    # check coupon giving
+    def test_coupon_giving(self):
+        global i
+        i=i+1
+        print("\n{}. Test coupon giving...".format(i))
+
+
+        create_result = create_store(self, "store", self.password, self.phone_number, self.address, self.store_name)
+
+        create_result = create_customer(self, "customer", self.password, "01030615135")
+        create_result = create_customer(self, "customer2", self.password, "01000115135")
+
+        request = self.factory.post('/api/coupon_publishing/', {"customer" : "customer"})
+        request.user = Store.objects.get(phone_number=self.phone_number).user
+        response = CouponPublishing.as_view()(request)
+
+        request = self.factory.post('/api/coupon_publishing/', {"customer" : "customer2"})
+        request.user = Store.objects.get(phone_number=self.phone_number).user
+        response = CouponPublishing.as_view()(request)
+
+        request = self.factory.post('/api/coupon_giving/1', {"customer" : "customer2", "stamp_count" : "1"})
+        request.user = Customer.objects.get(phone_number="01030615135").user
+        response = CouponUsing.as_view()(request)       
+
+        self.assertEqual(response.status_code, 403)
+
+
     # check coupon list of customer
     def test_coupon_list_of_customer(self):
         global i
@@ -149,7 +199,7 @@ class CustomerSignupTests(TestCase):
         phone_number = "01023111111111111111111111"
 
         result = self.client.post('/api/customer_sign_up/', {"account" : self.username, "password" : self.password, "phone_number" : phone_number})
-        self.assertEqual(result.status_code, 400)
+        self.assertEqual(result.status_code, 302)
       
 class StoreSignupTests(TestCase):
 
@@ -188,5 +238,5 @@ class StoreSignupTests(TestCase):
         phone_number = "01023111111111111111111111"
 
         result = self.client.post('/api/store_sign_up/', {"account" : self.username, "password" : self.password, "phone_number" : phone_number, "address" : self.address, "name" : self.store_name})
-        self.assertEqual(result.status_code, 400)
+        self.assertEqual(result.status_code, 302)
      
