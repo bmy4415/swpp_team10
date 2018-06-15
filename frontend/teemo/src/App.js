@@ -12,7 +12,7 @@ class App extends Component {
 
   render() {
 	  const Routing = () => (
-		<div>
+		<div className="App">
 			<Switch>
 				<Route exact path="/" component={MainPage}/>
 				<Route path="/SignUpCustomer" component={SignUpCustomerPage}/>

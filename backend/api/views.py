@@ -13,7 +13,6 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.views import *
 
 from django.db import IntegrityError
-# Create your views here.
 
 class AlreadyExistInDB(Exception):
     pass
@@ -28,7 +27,6 @@ class AccountExistInDB(Exception):
 class PhoneNumberExistInDB(Exception):
     pass
 
-# [TODO] login can be phone_number also
 class MyLoginView(LoginView):
     def form_valid(self, form):
         auth_login(self.request, form.get_user())
