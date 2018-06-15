@@ -32,21 +32,21 @@ class MainPage extends Component {
 			response.json()
 				.then((json)=>{
 					// login success
-					if (json.is_customer === "True") {	
+					if (json.is_customer === "True") {
+						this.props.onLoginPassed(this.state.id, "customer");
 						this.setState({
 							id: '',
 							password: '',
 							message: '',
 						});
-						this.props.onLoginPassed(this.state.id, "customer");
 					}
 					else {
+						this.props.onLoginPassed(this.state.id, "store");
 						this.setState({
 							id: '',
 							password: '',
 							message: '',
 						});
-						this.props.onLoginPassed(this.state.id, "store");
 					}
 				}).catch(()=>{
 					// login failed

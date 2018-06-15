@@ -26,6 +26,7 @@ class App extends Component {
 	
     return (
         <div className="App">
+
 			<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.12/semantic.min.css"></link>
 			<Routing/>
         </div>

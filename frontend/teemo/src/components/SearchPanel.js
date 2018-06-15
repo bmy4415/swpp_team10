@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import { Form, Grid, Button } from 'semantic-ui-react'
-
+import { Input, Form, Grid, Button } from 'semantic-ui-react'
+import '../pages/StorePage.css'
 class SearchPanel extends Component {
 	state = {
 		queryInput: '',
@@ -14,21 +14,14 @@ class SearchPanel extends Component {
 
 	render() {
 		return (
-			<div className="SearchPanel">
-                <hr/>
-                <Grid>
-                    <h3> Input user ID </h3>
+
+			<div>
                     <Form onSubmit={this.props.onSubmit}>
-                        <label>
-                            User ID
-                            <input type="text" onChange = {this.captureQueryInput} />
-                        </label>
-                        <Button bsstyle="primary" type="submit">
-                            Send it
+						<Input className="mt-50" style={{width:"350px", height: "37px"}} type="text" onChange={this.captureQueryInput} placeholder='Account or Phone Number'/>
+                        <Button className="button-style2" type="submit">
+                            Search
                         </Button>
                     </Form>
-                    <hr/>
-                </Grid>
             </div>
 		)
 	}

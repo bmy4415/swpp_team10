@@ -6,6 +6,9 @@ import LogoutButton from '../containers/LogoutButton.js';
 import PublishCouponButton from '../containers/PublishCouponButton.js'
 import UsingCouponButton from '../containers/UsingCouponButton.js'
 import cookie from 'react-cookies';
+import './StorePage.css';
+import { Menu, Container } from 'semantic-ui-react';
+
 
 class StorePage extends Component {
 
@@ -88,15 +91,31 @@ class StorePage extends Component {
 			return <Redirect to="/Customer"/>
 		}
 		return (
+
 			<div className="StorePage">
-				<h1> Store Page </h1>
-				<LogoutButton/>
+
+
+ <div>
+    <Menu size="small" fixed='top' inverted>
+        <Menu.Item as='p' header>
+          티끌모아
+        </Menu.Item>
+		<Menu.Menu position="right">
+			<Menu.Item as='p'>
+				<LogoutButton/>	
+			</Menu.Item>
+		</Menu.Menu>	
+    </Menu>
+			</div>
+
+			<div className="mt-50"> 
 				<SearchPanel ref={(panelRef) => {this.panelRef = panelRef;}} onSubmit={this.onSubmitAccount}/>
 				<CouponPanel stampCount={this.props.statefunction.searchedStampCount} onClickStamp={this.onClickStamp}/>
 
 				{this.props.statefunction.queryCustomerAccount === undefined
 				? <UsingCouponButton/>
 				: <PublishCouponButton queryCustomerAccount={this.props.statefunction.queryCustomerAccount}/>}
+			</div>
 			</div>
 		);
 	}
