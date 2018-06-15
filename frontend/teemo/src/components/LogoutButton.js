@@ -26,7 +26,7 @@ class LogoutButton extends Component {
 	}
 	render() {
 		return (
-            <Button onClick={this.onClickLogout} type="button">Logout</Button>
+            <Button onClick={this.onClickLogout} type="button" inverted>Logout</Button>
 		);
 	}
 }
