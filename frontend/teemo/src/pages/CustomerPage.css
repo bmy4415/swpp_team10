@@ -1,19 +1,19 @@
-.MainPage {
-    background: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.8) ), url('../assets/main_page.jpg');
+.CustomerPage {
+    background: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.8) ), url('../assets/store_page.jpeg');
     background-repeat: no-repeat;
     background-size: cover;
     height: 100%;   
+	margin-top: 45px;
 }
-.sign-in-panel{
-    margin-top: 20%;
-    
-} 
 
-.sign-in-panel-font{
+.store-name-font{
     color : white !important;
+    font-size : 20px !important;
 }
-.sign-in-panel-font label{
+
+.customer-font label{
     color: white !important;
+    
 }
 
 .button-style button{
@@ -29,4 +29,3 @@
     border-style: solid !important;
     border-width: 1px ! important;
 }
-

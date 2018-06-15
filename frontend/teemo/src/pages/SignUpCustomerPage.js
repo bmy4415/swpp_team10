@@ -4,7 +4,7 @@ import { Redirect } from 'react-router-dom'
 import cookie from 'react-cookies';
 import axios from 'axios';
 import ErrorMessageBar from '../components/ErrorMessageBar';
-
+import './SignUpCustomerPage.css';
 
 /* GLOBAL VARIBALES */
 const FILL_MESSAGE = 'Please fill all fields';
@@ -113,12 +113,12 @@ class SignUpCustomerPage extends Component {
     } 
 
 	render() {
-		  if(this.props.statefunction.isLoggedIn)
-		  {
-			  if(this.props.statefunction.loggedInUserType === 'customer')
-				  return <Redirect to="/Customer"/>
-			  else
-				  return <Redirect to="/Store"/>
+		if(this.props.statefunction.isLoggedIn)
+		{
+			if(this.props.statefunction.loggedInUserType === 'customer')
+				return <Redirect to="/Customer"/>
+			else
+				return <Redirect to="/Store"/>
 		  }
 		return (
 			<div className="SignUpCustomerPage">
@@ -126,25 +126,26 @@ class SignUpCustomerPage extends Component {
 					<Grid>
 						<Grid.Row centered>
 							<Grid.Column width={6}>
-								<h2>Sign up customer</h2>
+								<div className="sign-up-panel">
+								<h2 className="sign-up-panel-font"> Sign up customer</h2>
 								<Form onSubmit={this.onSubmitSignUp}>
 									<Form.Field>
-										<Form.Input type="text" onChange = {this.captureId} value={this.state.id} label="Account" placeholder="honggildong"/>
+										<Form.Input className="sign-up-panel-font" type="text" onChange = {this.captureId} value={this.state.id} label="Account" placeholder="honggildong"/>
 									</Form.Field>
 									<Form.Field>
-										<Form.Input type="password" onChange = {this.capturePassword} value={this.state.password} label="Password" placeholder="Your password"/>
+										<Form.Input className="sign-up-panel-font" type="password" onChange = {this.capturePassword} value={this.state.password} label="Password" placeholder="Your password"/>
 									</Form.Field>
 									<Form.Field>
-										<Form.Input type="password" onChange = {this.capturePasswordCheck} value={this.state.passwordCheck} label="Password check" placeholder="Your password again"/>
+										<Form.Input className="sign-up-panel-font" type="password" onChange = {this.capturePasswordCheck} value={this.state.passwordCheck} label="Password check" placeholder="Your password again"/>
 									</Form.Field>
 									<Form.Field>
-										<Form.Input type="text" onChange = {this.capturePhoneNumber} value={this.state.phoneNumber} label="Phone Number" placeholder="01012345678"/>
+										<Form.Input className="sign-up-panel-font" type="text" onChange = {this.capturePhoneNumber} value={this.state.phoneNumber} label="Phone Number" placeholder="01012345678"/>
 									</Form.Field>
-									<Button type='submit' content={"Sign up"}/>
+									<Button className="button-style2" type='submit' content={"Sign up"}/>
 								</Form>
 			
 								<br/>
-
+								</div>
 								<ErrorMessageBar message={this.state.message} />
 							</Grid.Column>
 						</Grid.Row>
