@@ -4,7 +4,7 @@ import CouponPanel from '../containers/CouponPanel.js';
 import LogoutButton from '../containers/LogoutButton.js';
 import cookie from 'react-cookies';
 import ErrorMessageBar from '../components/ErrorMessageBar';
-import { Button, Grid, Container, Label, Segment, Form } from 'semantic-ui-react';
+import { Menu,Button, Grid, Container, Label, Segment, Form } from 'semantic-ui-react';
 import { Accordion, Icon } from 'semantic-ui-react'
 import axios from 'axios';
 import './CustomerPage.css';
@@ -79,7 +79,16 @@ class CustomerPage extends Component {
 		 //console.log(this.state.couponList);
 		return (
 			<div className="CustomerPage">
-			<LogoutButton/>
+    <Menu size="small" fixed='top' inverted>
+        <Menu.Item as='p' header>
+          티끌모아
+        </Menu.Item>
+		<Menu.Menu position="right">
+			<Menu.Item as='p'>
+				<LogoutButton/>	
+			</Menu.Item>
+		</Menu.Menu>	
+    </Menu>
 			<br/>
 
 			<Container textAlign='left'>
