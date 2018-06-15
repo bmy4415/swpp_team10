@@ -1,0 +1,30 @@
+.CustomerPage {
+    background: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.8) ), url('../assets/store_page.jpeg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 100%;   
+}
+
+.store-name-font{
+    color : white !important;
+    font-size : 20px !important;
+}
+
+.customer-font label{
+    color: white !important;
+    
+}
+
+.button-style button{
+    background: rgba(0,0,0,0) !important;
+    color: rgba(255,255,255) !important;
+    border-style: solid !important;
+    border-width: 1px ! important;
+}
+
+.button-style2{
+    background: rgba(0,0,0,0) !important;
+    color: rgba(255,255,255) !important;
+    border-style: solid !important;
+    border-width: 1px ! important;
+}

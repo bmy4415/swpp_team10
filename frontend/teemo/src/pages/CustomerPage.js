@@ -5,8 +5,9 @@ import LogoutButton from '../containers/LogoutButton.js';
 import cookie from 'react-cookies';
 import ErrorMessageBar from '../components/ErrorMessageBar';
 import { Button, Grid, Container, Label, Segment, Form } from 'semantic-ui-react';
+import { Accordion, Icon } from 'semantic-ui-react'
 import axios from 'axios';
-
+import './CustomerPage.css';
 
 /* messaged */
 const getCouponListErrorMessage = '서버가 쿠폰정보를 안알려주네요';
@@ -20,8 +21,19 @@ class CustomerPage extends Component {
 		targetUserPhoneNumber: '',
 		giveCount: '',
 		targetCouponID: '',
+		activeIndex: -1
 	}
 	
+	handleClick(e, titleProps) {
+		const newIndex = this.state.activeIndex === titleProps.index ? -1 : titleProps.index
+		if (newIndex === -1){
+			this.setState({ targetCouponID: ' '})
+		}
+		this.setState({ targetCouponID: newIndex})
+		this.setState({ activeIndex: newIndex })
+		
+	}
+
 	// To make fetch call automatically
 	// when react start rendering this page
 	componentDidMount() {
@@ -66,47 +78,55 @@ class CustomerPage extends Component {
 // )
 		 //console.log(this.state.couponList);
 		return (
-			<Container textAlign='center'>
+			<div className="CustomerPage">
 			<LogoutButton/>
 			<br/>
 
-			<Grid columns={3} divided>
-				<Grid.Row stretched>
-					<Grid.Column>
-						<Segment>
-						<Label color='olive'>hi</Label>
-						</Segment>
-						<Segment>
-						<Label color='olive'>hello</Label>
-						</Segment>
-					</Grid.Column>
+			<Container textAlign='left'>
+			<Grid>
+				<Grid.Row>
 					<Grid.Column>
 						{this.state.couponList ?
-						this.state.couponList.map(coupon => (
-							<Segment key={Math.random()} onClick={(e) => this.onClickCoupon(coupon.coupon.id, e)}>
-								{`[id: ${coupon.coupon.id}] [account: ${coupon.coupon.store.account}] [address: ${coupon.coupon.store.address}] [stamp_count: ${coupon.coupon.stamp_count}]`}
-							<CouponPanel stampCount={coupon.coupon.stamp_count} onClickStamp={err => err}/>
-							</Segment>
-						))
-						: null}
-					</Grid.Column>
-					<Grid.Column>
-						<Form onSubmit={this.onSubmitGive}>
-							<Form.Field>
-								<Form.Input type="text" onChange = {this.captureUserPhoneNumber} value={this.state.targetUserPhoneNumber} label="Phone Number" placeholder="01012345678"/>
-							</Form.Field>
-							<Form.Field>
-								<Form.Input type="text" onChange = {this.captureGiveCount} value={this.state.giveCount} label="Count" placeholder="0 ~ your stamps"/>
-							</Form.Field>
-							<Form.Field>
-								<Form.Input type="text" onChange = {this.captureCouponID} value={this.state.targetCouponID} label="Coupon id" placeholder="coupon id"/>
-							</Form.Field>
-							<Button type='submit' content={"Give"}/>
-						</Form>	
+						this.state.couponList.map(cplist => (
+							<Accordion>
+								<Accordion.Title active={this.state.activeIndex === cplist.coupon.id} index={cplist.coupon.id} 
+									onClick={(e, titleProps) => this.handleClick(e, titleProps)}>
+										<p className = 'store-name-font'>
+										{'△ '+cplist.coupon.store.name + ' ' + '(' + cplist.coupon.store.address + ')'} 
+										</p>
+								</Accordion.Title>
+								<Accordion.Content active={this.state.activeIndex === cplist.coupon.id}>
+									<CouponPanel stampCount={cplist.coupon.stamp_count} onClickStamp={err => err}/>
+									
+									<Form onSubmit={this.onSubmitGive}>
+										<Grid columns={3} devided>
+											<Grid.Row stretched>
+												<Grid.Column>
+													<Form.Field>
+														<Form.Input className='customer-font' type="text" onChange = {this.captureUserPhoneNumber} value={this.state.targetUserPhoneNumber} label="Account or Phone Number" placeholder="01012345678"/>
+													</Form.Field>
+												</Grid.Column>
+												<Grid.Column>
+													<Form.Field>
+														<Form.Input className='customer-font' type="text" onChange = {this.captureGiveCount} value={this.state.giveCount} label="Count" placeholder="0 ~ your stamps"/>
+													</Form.Field>
+												</Grid.Column>
+												<Grid.Column>
+													<Button type='submit' content={"Give"}/>
+												</Grid.Column>
+											</Grid.Row>
+										</Grid>
+									</Form>	
+								
+								</Accordion.Content>	
+							</Accordion>
+							)
+						) : null}
 					</Grid.Column>
 				</Grid.Row>
 			</Grid>
 			</Container>
+			</div>
 		);
 	}
 

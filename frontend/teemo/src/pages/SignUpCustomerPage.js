@@ -113,12 +113,12 @@ class SignUpCustomerPage extends Component {
     } 
 
 	render() {
-		  if(this.props.statefunction.isLoggedIn)
-		  {
-			  if(this.props.statefunction.loggedInUserType === 'customer')
-				  return <Redirect to="/Customer"/>
-			  else
-				  return <Redirect to="/Store"/>
+		if(this.props.statefunction.isLoggedIn)
+		{
+			if(this.props.statefunction.loggedInUserType === 'customer')
+				return <Redirect to="/Customer"/>
+			else
+				return <Redirect to="/Store"/>
 		  }
 		return (
 			<div className="SignUpCustomerPage">
