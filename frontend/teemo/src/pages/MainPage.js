@@ -3,7 +3,7 @@ import { Form, Button, Grid, Container } from 'semantic-ui-react';
 import { Redirect, Link } from 'react-router-dom';
 import cookie from 'react-cookies';
 import ErrorMessageBar from '../components/ErrorMessageBar';
-
+import './MainPage.css';
 
 const LOGIN_FAIL_MESSAGE = 'Login failed, check your account and/or password';
 
@@ -89,32 +89,36 @@ class MainPage extends Component {
 					<Grid>
 						<Grid.Row centered>
 							<Grid.Column width={6}>
-								<h2>Teemo</h2>
+							<div className="sign-in-panel">
+								<h2 className="sign-in-panel-font">Teemo</h2>
 								<Form onSubmit={this.onSubmitLogin} >
 									<Form.Field>
-										<Form.Input type="text" onChange = {this.captureId} value={this.state.id} label="Account" placeholder="honggildong OR 01012345678"/>
+										<Form.Input className="sign-in-panel-font" type="text" onChange = {this.captureId} value={this.state.id} label="Account" placeholder="honggildong OR 01012345678"/>
 									</Form.Field>
 									<Form.Field>
-										<Form.Input type="password" onChange = {this.capturePassword} value={this.state.password} label="Password" placeholder="Your password"/>
+										<Form.Input className="sign-in-panel-font" type="password" onChange = {this.capturePassword} value={this.state.password} label="Password" placeholder="Your password"/>
 									</Form.Field>
-									<Form.Button type='submit' content={"Sign in"}/>
+									<Form.Button className="button-style" type='submit' content={"Sign in"}/>
 								</Form>
 
 								<br/>
 
 								<Link to="/SignUpCustomer">
-									<Button content="Sign up(customer)"/>
+									<Button className="button-style2" content="Sign up(customer)"/>
 								</Link>
 
 								<Link to="/SignUpStore">
-									<Button content="Sign up(store)"/>
+									<Button className="button-style2" content="Sign up(store)"/>
 								</Link>
 		
 								<br/>
 								<br/>
 								<ErrorMessageBar message={this.state.message} />
+							</div>
 							</Grid.Column>
 						</Grid.Row>
+						
+
 					</Grid>
 				</Container>
 			</div>

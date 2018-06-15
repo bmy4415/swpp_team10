@@ -1,0 +1,30 @@
+.MainPage {
+    background: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.8) ), url('../assets/store_page.jpeg');
+    height: 100%;
+    
+}
+.sign-in-panel{
+    margin-top: 50%;
+    
+} 
+
+.sign-in-panel-font{
+    color : white !important;
+}
+.sign-in-panel-font label{
+    color: white !important;
+}
+
+.button-style button{
+    background: rgba(0,0,0,0) !important;
+    color: rgba(255,255,255) !important;
+    border-style: solid !important;
+    border-width: 1px ! important;
+}
+
+.button-style2{
+    background: rgba(0,0,0,0) !important;
+    color: rgba(255,255,255) !important;
+    border-style: solid !important;
+    border-width: 1px ! important;
+}
