@@ -133,7 +133,8 @@ class CouponPublishing(generics.CreateAPIView):
         if len(customer_user) == 1 :
             owner_customer = Customer.objects.get(user=customer_user[0])
         else :
-            customer_filtered= Customer.objects.filter(phone_number=serializer.validated_data['customer'])
+            arranged_phone_number = serializer.validated_data['customer'].replace('-', '')
+            customer_filtered = Customer.objects.filter(phone_number=arranged_phone_number)
             if len(customer_filtered) == 0 :
                 raise CustomerIsNotExist
             owner_customer=customer_filtered[0]
@@ -282,7 +283,8 @@ class CouponGiving(generics.RetrieveUpdateAPIView):
             to_customer = Customer.objects.get(user=to_customer_user[0])
         else :
             # have to find with phone_number
-            customer_filtered= Customer.objects.filter(phone_number=to_customer_name)
+            to_customer_phone_number = to_customer_name.replace('-', '')
+            customer_filtered= Customer.objects.filter(phone_number=to_customer_phone_number)
             if len(customer_filtered) == 0 :
                 raise CustomerIsNotExist
             to_customer = customer_filtered[0]
