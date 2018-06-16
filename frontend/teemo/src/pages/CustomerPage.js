@@ -135,7 +135,7 @@ class CustomerPage extends Component {
 	                                            <Grid.Column />
 												<Grid.Column width={2}>
                                                     <br/>
-													<Button type='submit' content={"Give !"} size="small"/>
+													<Button type='submit' className="button-style2" content={"Give !"} size="small"/>
                                                     <br/>
 												</Grid.Column>
 											</Grid.Row>
