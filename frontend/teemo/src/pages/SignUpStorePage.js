@@ -5,11 +5,14 @@ import cookie from 'react-cookies';
 import axios from 'axios';
 import ErrorMessageBar from '../components/ErrorMessageBar';
 import './SignUpStorePage.css';
+import { hostAddress } from '../store/selectors.js';
 
 /* GLOBAL VARIBALES */
 const FILL_MESSAGE = 'Please fill all fields';
 const PASSWORD_MESSAGE = 'Password should be same';
 const PHONE_NUMBER_MESSAGE = 'Write correct phone number';
+
+const signup_URL = hostAddress + '/api/store_sign_up/';
 
 class SignUpStorePage extends Component {
 	state = {
@@ -212,7 +215,7 @@ function checkSignUpForm(state) {
 function callSignUpApi(id, password, phoneNumber, address, storeName) {
 	const options = {
 		method: 'POST',
-		url: 'http://localhost:8000/api/store_sign_up/',
+		url: signup_URL,
 		headers: {
 			'Accept' : 'application/json',
 			'Content-Type' : 'application/json',

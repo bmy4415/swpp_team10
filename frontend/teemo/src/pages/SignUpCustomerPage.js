@@ -5,11 +5,14 @@ import cookie from 'react-cookies';
 import axios from 'axios';
 import ErrorMessageBar from '../components/ErrorMessageBar';
 import './SignUpCustomerPage.css';
+import { hostAddress } from '../store/selectors.js';
 
 /* GLOBAL VARIBALES */
 const FILL_MESSAGE = 'Please fill all fields';
 const PASSWORD_MESSAGE = 'Password should be same';
 const PHONE_NUMBER_MESSAGE = 'Write correct phone number';
+
+const signup_URL = hostAddress + '/api/customer_sign_up/';
 
 class SignUpCustomerPage extends Component {
 	state = {
@@ -198,7 +201,7 @@ function checkSignUpForm(state) {
 function callSignUpApi(id, password, phoneNumber) {
 	const options = {
 		method: 'POST',
-		url: 'http://localhost:8000/api/customer_sign_up/',
+		url: signup_URL,
 		headers: {
 			'Accept' : 'application/json',
 			'Content-Type' : 'application/json',

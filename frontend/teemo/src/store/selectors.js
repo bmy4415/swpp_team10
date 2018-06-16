@@ -8,3 +8,5 @@ export const initialState =
 		searchedStampCount: undefined,
 		customerCouponList: undefined,
 	}
+
+export const hostAddress = "http://13.125.82.156:8000"

@@ -8,14 +8,17 @@ import UsingCouponButton from '../containers/UsingCouponButton.js'
 import cookie from 'react-cookies';
 import './StorePage.css';
 import { Menu, Button, Container, Segment } from 'semantic-ui-react';
+import { hostAddress } from '../store/selectors.js';
 
+const couponList_URL = hostAddress + '/api/coupon_list_of_store/';
+const stamping_URL = hostAddress + '/api/coupon_stamping/';
 
 class StorePage extends Component {
 
 	onSubmitAccount = (event) =>
 	{
 		event.preventDefault();
-		fetch("http://localhost:8000/api/coupon_list_of_store/", {
+		fetch(couponList_URL, {
 			method: 'GET',
 			headers: {
 				'Accept' : 'application/json',
@@ -62,7 +65,7 @@ class StorePage extends Component {
 	onClickStamp = () =>
 	{
 		console.log("http://localhost:8000/api/coupon_stamping/"+this.props.statefunction.queryCouponId)
-		fetch("http://localhost:8000/api/coupon_stamping/"+this.props.statefunction.queryCouponId, {
+		fetch(stamping_URL + this.props.statefunction.queryCouponId, {
 			method: 'PUT',
 			headers: {
 				'Accept' : 'application/json',
