@@ -9,4 +9,4 @@ export const initialState =
 		customerCouponList: undefined,
 	}
 
-export const hostAddress = "http://13.125.82.156:8000"
+export const hostAddress = "http://localhost:8000"

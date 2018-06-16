@@ -33,7 +33,7 @@ class StorePage extends Component {
 				response.json().then((array)=>{
 					// cause a customer have only one coupon published by the store, searchResult have only one element.
 					let searchResult = array.find((cursor)=>{
-						return cursor.customer.account === this.panelRef.state.queryInput || cursor.customer.phone_number === this.panelRef.state.queryInput;
+						return cursor.customer.account === this.panelRef.state.queryInput || cursor.customer.phone_number === this.panelRef.state.queryInput || cursor.customer.phone_number === this.panelRef.state.queryInput.replace(/-/gi, '');
 					})
 					if(searchResult === undefined)
 					{

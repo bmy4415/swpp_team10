@@ -164,7 +164,7 @@ class SignUpStorePage extends Component {
 								<Form.Field>
 								<Form.Input className="sign-up-panel-font" type="text" onChange = {this.capturePhoneNumber} value={this.state.phoneNumber} label="Phone Number" placeholder="01012345678"/>
 								</Form.Field>
-								<Button className="button-style2" type='submit' content={"Sign up"}/>
+								<Button inverted type='submit' content={"Sign up"}/>
 
 							</Form>
 							

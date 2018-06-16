@@ -116,12 +116,16 @@ class CustomerPage extends Component {
 										{'△ '+cplist.coupon.store.name + ' ' + '(' + cplist.coupon.store.address + ')'} 
 										</p>
 								</Accordion.Title>
-								<Accordion.Content active={this.state.activeIndex === cplist.coupon.id}>
-									<CouponPanel stampCount={cplist.coupon.stamp_count} onClickStamp={err => err}/>
+
+
+								<Accordion.Content className="coupon-panel-customer-mt" active={this.state.activeIndex === cplist.coupon.id}>
+					<div className="coupon-panel-store-container">
+					<Segment attached className="coupon-panel-store-panel">
+					
+									<CouponPanel hover="false" stampCount={cplist.coupon.stamp_count} onClickStamp={err => err}/>
 									
 									<Form onSubmit={this.onSubmitGive}>
 										<Grid columns={3} devided>
-											<Grid.Row stretched>
 												<Grid.Column>
 													<Form.Field>
 														<Form.Input className='customer-font' type="text" onChange = {this.captureUserPhoneNumber} value={this.state.targetUserPhoneNumber} label="Account or Phone Number" placeholder="01012345678"/>
@@ -132,17 +136,17 @@ class CustomerPage extends Component {
 														<Form.Input className='customer-font' type="text" onChange = {this.captureGiveCount} value={this.state.giveCount} label="Count" placeholder="0 ~ your stamps"/>
 													</Form.Field>
 												</Grid.Column>
-	                                            <Grid.Column />
-												<Grid.Column width={2}>
-                                                    <br/>
-													<Button type='submit' className="button-style2" content={"Give !"} size="small"/>
-                                                    <br/>
+												<Grid.Column>
+													<Button className="coupon-panel-customer-give-mt" type='submit' inverted content={"Give !"} size="small"/>
 												</Grid.Column>
-											</Grid.Row>
 										</Grid>
 									</Form>	
 								
-								</Accordion.Content>	
+							</Segment>
+					</div>
+
+								</Accordion.Content>
+
 							</Accordion>
 							)
 						) : null}
