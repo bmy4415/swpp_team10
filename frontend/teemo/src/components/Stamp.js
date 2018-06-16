@@ -13,6 +13,28 @@ class Stamp extends Component {
 		console.log("Stamping success");
 	}
 	render() {
+		if(this.props.hover==="false")
+		{
+			if(this.props.isStamped)
+			{
+				return (
+				<div className="Stamp">
+						<Image circular size='small' src={stampImage} />
+				</div>
+				)
+			}
+			else
+			{
+				return (
+				<div className="Stamp">
+						<Image circular size='small' src={coverImage} />
+				</div>
+				)
+			}
+		}
+
+		else
+		{
 		return (
 			<div className="Stamp">
 				
@@ -26,6 +48,7 @@ class Stamp extends Component {
 				</Reveal>
 			</div>
 		);
+		}
 	}
 }
 
