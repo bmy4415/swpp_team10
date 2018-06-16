@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Image, Reveal } from 'semantic-ui-react'
-import coverImage from '../assets/square-image.png'
-import stampImage from '../assets/stevie.jpg'
+import coverImage from '../assets/stevie_gray.jpg'
+import stampImage from '../assets/stevie_nurigiri.jpg'
 
 class Stamp extends Component {
 	state = {
@@ -16,7 +16,7 @@ class Stamp extends Component {
 		return (
 			<div className="Stamp">
 				
-				<Reveal active={this.props.isStamped} animated='fade' onClick={this.props.isStamped ? null : this.onClick}>
+				<Reveal active={this.props.isStamped} animated='fade' instant onClick={this.props.isStamped ? null : this.onClick}>
 					<Reveal.Content visible>
 						<Image circular size='small' src={coverImage} />
 					</Reveal.Content>
