@@ -36,7 +36,7 @@ class CouponPanel extends Component {
 				for (let j=0; j<5; j++){
 					columns.push(
 						<Grid.Column key={key++}>
-							<Stamp isStamped={true} key={key++} onClickStamp={this.props.onClickStamp}/>
+							<Stamp hover={this.props.hover} isStamped={true} key={key++} onClickStamp={this.props.onClickStamp}/>
 						</Grid.Column>
 					)
 				}
@@ -52,14 +52,14 @@ class CouponPanel extends Component {
 			for (let i=0; i<rest; i++) {
 				columns.push(
 						<Grid.Column key={key++}>
-							<Stamp isStamped={true} key={key++} onClickStamp={this.props.onClickStamp}/>
+							<Stamp hover={this.props.hover} isStamped={true} key={key++} onClickStamp={this.props.onClickStamp}/>
 						</Grid.Column>
 					)
 			}
 			for (let i=0; i<5-rest; i++) {
 				columns.push(
 						<Grid.Column key={key++}>
-							<Stamp isStamped={false} key={key++} onClickStamp={this.props.onClickStamp}/>
+							<Stamp hover={this.props.hover} isStamped={false} key={key++} onClickStamp={this.props.onClickStamp}/>
 						</Grid.Column>
 					)
 			}

@@ -9,11 +9,20 @@
 .store-name-font{
     color : white !important;
     font-size : 20px !important;
+	margin-left : 16% !important;
 }
 
+.customer-font div input{
+    color: white !important;
+	background-color: transparent !important;
+    border-bottom-color: white !important;
+    border-radius: 0 0 0 0 !important;
+    border-top: none !important;
+    border-left: none !important;
+    border-right: none !important; 
+}
 .customer-font label{
     color: white !important;
-    
 }
 
 .button-style button{
@@ -28,4 +37,12 @@
     color: rgba(255,255,255) !important;
     border-style: solid !important;
     border-width: 1px ! important;
+}
+
+.coupon-panel-customer-mt{
+	margin-top: -15px;
+}
+
+.coupon-panel-customer-give-mt{
+	margin-top: 26px !important;
 }

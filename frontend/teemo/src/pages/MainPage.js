@@ -101,17 +101,17 @@ class MainPage extends Component {
 									<Form.Field>
 										<Form.Input className="sign-in-panel-font" type="password" onChange = {this.capturePassword} value={this.state.password} label="Password" placeholder="Your password"/>
 									</Form.Field>
-									<Form.Button className="button-style" type='submit' content={"Sign in"}/>
+									<Form.Button inverted type='submit' content={"Sign in"}/>
 								</Form>
 
 								<br/>
 
 								<Link to="/SignUpCustomer">
-									<Button className="button-style2" content="Sign up(customer)"/>
+									<Button inverted content="Sign up(customer)"/>
 								</Link>
 
 								<Link to="/SignUpStore">
-									<Button className="button-style2" content="Sign up(store)"/>
+									<Button inverted content="Sign up(store)"/>
 								</Link>
 		
 								<br/>
