@@ -1,7 +1,3 @@
-.mt-50 {
-    margin-top: 45px; 
-}
-
 .StorePage {
 	background: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.8) ), url('../assets/store_page.jpeg');
     height: 100%;
@@ -9,3 +5,66 @@
 	background-size: cover;
 }
 
+.search-bar-mt input{
+	margin-top: 2px !important;
+}
+
+.font-18 {
+	font-size: 18px;
+}
+
+.font-14 {
+	font-size: 14px;
+}
+
+.font-white {
+    color: white !important;
+    
+}
+
+.button-style button{
+    background: rgba(0,0,0,0) !important;
+    color: rgba(255,255,255) !important;
+    border-style: solid !important;
+    border-width: 1px ! important;
+}
+
+.button-style2{
+    background: rgba(0,0,0,0) !important;
+    color: rgba(255,255,255) !important;
+    border-style: solid !important;
+    border-width: 1px ! important;
+}
+
+
+.button-style-dropdown{
+	margin-left: -1px !important;
+}
+
+.coupon-panel-store-container{
+	padding-left: 30px !important;
+	padding-right: 30px !important;
+	padding-bottom: 15px !important;
+    background-color: rgba(0,0,0,0.3) !important;
+	margin-top: 20px !important;
+	margin-bottom: 10px !important;
+    width: 60%;
+    margin-left: 20% !important;
+	border-radius: 20px 20px 20px 20px !important;
+	-webkit-border-radius: 20px 20px 20px 20px !important;
+
+}
+
+.coupon-panel-store-topbar{
+	background-color: transparent !important;
+}
+.coupon-panel-store-panel {
+    border-radius: 0px 0px 25px 25px !important;
+    -webkit-border-radius: 0px 0px 25px 25px !important;
+    background-color: transparent !important;
+    border-width: 0 !important;
+}
+
+.coupon-panel-store-clear {
+	margin-left: -5px !important;
+}

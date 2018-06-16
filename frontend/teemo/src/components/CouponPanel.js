@@ -1,16 +1,22 @@
 import React, { Component } from 'react';
 import Stamp from './Stamp.js';
-import { Grid } from 'semantic-ui-react';
+import { Grid, Segment } from 'semantic-ui-react';
 
 class CouponPanel extends Component {	
 	render() {
 		if(this.props.stampCount === undefined)
 		{
+			if(this.props.statefunction.queryCustomerAccount === undefined)
+			{
+				return(
+				<div className="font-white">
+					<h1> Please search your customer! </h1>
+				</div>	
+				)
+			}
 			return(
-			<div className="CouponPanel">
-				<Grid>
-					<h1> The Customer has no coupon </h1>
-				</Grid>
+			<div className="font-white">
+					<h1> {this.props.statefunction.queryCustomerAccount} has no coupon </h1>
 			</div>)
 		}
 		else
@@ -70,6 +76,7 @@ class CouponPanel extends Component {
 					{unfilledRow}
 				</Grid>
 				</div>
+
 			);
 		}
 	}

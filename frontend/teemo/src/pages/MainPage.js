@@ -96,7 +96,7 @@ class MainPage extends Component {
 								<h2 className="sign-in-panel-font">Teemo</h2>
 								<Form onSubmit={this.onSubmitLogin} >
 									<Form.Field>
-										<Form.Input className="sign-in-panel-font" type="text" onChange = {this.captureId} value={this.state.id} label="Account" placeholder="honggildong OR 01012345678"/>
+										<Form.Input className="sign-in-panel-font" type="text" onChange = {this.captureId} value={this.state.id} label="Account" placeholder="Your account"/>
 									</Form.Field>
 									<Form.Field>
 										<Form.Input className="sign-in-panel-font" type="password" onChange = {this.capturePassword} value={this.state.password} label="Password" placeholder="Your password"/>

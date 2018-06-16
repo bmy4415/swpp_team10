@@ -28,8 +28,8 @@ class UsingCouponButton extends Component {
 			console.log(response);
 			if(response.ok)
 			{
-				this.props.onSetSearchResult(this.props.statefunction.queryCouponId, undefined, this.props.statefunction.searchedStampCount-this.dropdownValue.state.value)
-				console.log("Using coupon success")
+				this.props.onSetSearchResult(this.props.statefunction.queryCouponId, this.props.statefunction.queryCustomerAccount, this.props.statefunction.searchedStampCount-this.dropdownValue.state.value)
+				alert("Using coupon success!")
 			}
 			else
 			{
@@ -55,17 +55,13 @@ class UsingCouponButton extends Component {
 
 	render() {
 		return (
-			<div className="UsingCouponButton">
 				<Button.Group>
-					<Button onClick={this.onClickUsingCoupon}>
+					<Button inverted onClick={this.onClickUsingCoupon}>
 						Use Coupons
 					</Button>
-					<Dropdown options={this.options()} floating button className='icon' ref={ref => {this.dropdownValue = ref;}}
- defaultValue={this.props.statefunction.searchedStampCount}/>
+					<Dropdown options={this.options()} className='button-style-dropdown ui inverted button icon' ref={ref => {this.dropdownValue = ref;}}
+ defaultValue={this.props.statefunction.searchedStampCount} floating button/>
 				</Button.Group>			
-			
-				<h2> {this.state.message} </h2>
-			</div>
 		);
 	}
 }
