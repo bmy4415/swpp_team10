@@ -119,7 +119,7 @@ class CustomerPage extends Component {
 
 
 								<Accordion.Content className="coupon-panel-customer-mt" active={this.state.activeIndex === cplist.coupon.id}>
-					<div className="coupon-panel-store-container">
+					<div className="coupon-panel-customer-container">
 					<Segment attached className="coupon-panel-store-panel">
 					
 									<CouponPanel hover="false" stampCount={cplist.coupon.stamp_count} onClickStamp={err => err}/>
@@ -180,7 +180,6 @@ class CustomerPage extends Component {
 				this.setState({
 					targetUserPhoneNumber: '',
 					giveCount: '',
-					targetCouponID: '',
 				});
 				// get my coupon list again
 				getCouponList()
