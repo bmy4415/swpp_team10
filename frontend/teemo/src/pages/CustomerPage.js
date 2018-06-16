@@ -8,9 +8,12 @@ import { Menu,Button, Grid, Container, Label, Segment, Form } from 'semantic-ui-
 import { Accordion, Icon } from 'semantic-ui-react'
 import axios from 'axios';
 import './CustomerPage.css';
+import { hostAddress } from '../store/selectors.js';
 
 /* messaged */
 const getCouponListErrorMessage = '서버가 쿠폰정보를 안알려주네요';
+const couponList_URL = hostAddress + '/api/coupon_list_of_customer/';
+const giveCoupon_URL = hostAddress + '/api/coupon_giving/';
 
 class CustomerPage extends Component {
 	state = {
@@ -196,7 +199,7 @@ class CustomerPage extends Component {
 function giveCoupon(phoneNumber, count, couponID) {
 	const options = {
 		method: 'PUT',
-		url: `http://localhost:8000/api/coupon_giving/${couponID}`,
+		url: giveCoupon_URL + couponID,
 		headers: {
 			'Accept' : 'application/json',
 			'Content-Type' : 'application/json',
@@ -220,7 +223,7 @@ function giveCoupon(phoneNumber, count, couponID) {
 function getCouponList() {
 	const options = {
 		method: 'GET',
-		url: 'http://localhost:8000/api/coupon_list_of_customer/',
+		url: couponList_URL,
 		headers: {
 			'Accept' : 'application/json',
 			'Content-Type' : 'application/json',

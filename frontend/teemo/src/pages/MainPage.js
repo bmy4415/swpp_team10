@@ -4,8 +4,11 @@ import { Redirect, Link } from 'react-router-dom';
 import cookie from 'react-cookies';
 import ErrorMessageBar from '../components/ErrorMessageBar';
 import './MainPage.css';
+import { hostAddress } from '../store/selectors.js';
 
 const LOGIN_FAIL_MESSAGE = 'Login failed, check your account and/or password';
+
+const login_URL = hostAddress + "/api/login/";
 
 class MainPage extends Component {
 	state = {
@@ -20,7 +23,7 @@ class MainPage extends Component {
 		let formData = new FormData();
 		formData.append('username', this.state.id);
 		formData.append('password', this.state.password);
-		fetch("http://localhost:8000/api/login/", {
+		fetch(login_URL, {
 			method: 'POST',
 			headers: {
 				'X-CSRFToken' : cookie.load('csrftoken'),

@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
 import { Button } from 'semantic-ui-react'
 import cookie from 'react-cookies';
+import { hostAddress } from '../store/selectors.js';
+
+const logout_URL = hostAddress + '/api/logout/';
 
 class LogoutButton extends Component {
 	onClickLogout = (event) => {
 		event.preventDefault();
-		fetch("http://localhost:8000/api/logout/", {
+		fetch(logout_URL, {
 			method: 'GET',
 			headers: {
 				'X-CSRFToken' : cookie.load('csrftoken'),

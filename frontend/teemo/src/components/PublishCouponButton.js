@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 import { Button } from 'semantic-ui-react'
 import cookie from 'react-cookies';
+import { hostAddress } from '../store/selectors.js';
+
+const couponList_URL = hostAddress + '/api/coupon_list_of_store/';
+const couponPublish_URL = hostAddress + '/api/coupon_publishing/';
 
 class PublishCouponButton extends Component {
 	state = {
@@ -9,7 +13,7 @@ class PublishCouponButton extends Component {
 
 	afterPublishing = () =>
 	{
-		fetch("http://localhost:8000/api/coupon_list_of_store/", {
+		fetch(couponList_URL, {
 			method: 'GET',
 			headers: {
 				'Accept' : 'application/json',
@@ -54,7 +58,7 @@ class PublishCouponButton extends Component {
 
 	onClickPublishCoupon = (event) => {
 		event.preventDefault();
-		fetch("http://localhost:8000/api/coupon_publishing/", {
+		fetch(couponPublish_URL, {
 			method: 'POST',
 			headers: {
 				'Accept' : 'application/json',

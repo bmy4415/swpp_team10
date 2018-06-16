@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import { Button, Dropdown } from 'semantic-ui-react'
 import cookie from 'react-cookies';
+import { hostAddress } from '../store/selectors.js';
+
+const couponUsing_URL = hostAddress + '/api/coupon_using/';
 
 class UsingCouponButton extends Component {
 	state = {
@@ -10,7 +13,7 @@ class UsingCouponButton extends Component {
 	onClickUsingCoupon = (event) => {
 		event.preventDefault();
 		console.log(this.dropdownValue.state.value)
-		fetch("http://localhost:8000/api/coupon_using/"+this.props.statefunction.queryCouponId, {
+		fetch(couponUsing_URL + this.props.statefunction.queryCouponId, {
 			method: 'PUT',
 			headers: {
 				'Accept' : 'application/json',
