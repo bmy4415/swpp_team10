@@ -12,7 +12,7 @@ class StateLoader {
 
     loadState() {
         try {
-            let serializedState = localStorage.getItem("http://localhost:3000:state");//TODO: this should be replaced with localhost:8000
+            let serializedState = localStorage.getItem(hostAddress + ":state");//TODO: this should be replaced with localhost:8000
 
             if (serializedState === null) {
                 return this.initializeState();
@@ -28,7 +28,7 @@ class StateLoader {
     saveState(state) {
         try {
             let serializedState = JSON.stringify(state);
-            localStorage.setItem("http://localhost:3000:state", serializedState);
+            localStorage.setItem(hostAddress + ":state", serializedState);
 
         }
         catch (err) {
