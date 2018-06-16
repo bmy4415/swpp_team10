@@ -1,7 +1,8 @@
 .StorePage {
 	background: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.8) ), url('../assets/store_page.jpeg');
-    height: 100%;
+    min-height: 102%;
 	background-repeat: no-repeat;
+    background-attachment: fixed;
 	background-size: cover;
 }
 
