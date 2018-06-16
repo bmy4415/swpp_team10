@@ -123,8 +123,11 @@ class CustomerPage extends Component {
 														<Form.Input className='customer-font' type="text" onChange = {this.captureGiveCount} value={this.state.giveCount} label="Count" placeholder="0 ~ your stamps"/>
 													</Form.Field>
 												</Grid.Column>
-												<Grid.Column>
-													<Button type='submit' content={"Give"}/>
+	                                            <Grid.Column />
+												<Grid.Column width={2}>
+                                                    <br/>
+													<Button type='submit' content={"Give !"} size="small"/>
+                                                    <br/>
 												</Grid.Column>
 											</Grid.Row>
 										</Grid>
