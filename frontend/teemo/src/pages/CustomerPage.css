@@ -46,3 +46,18 @@
 .coupon-panel-customer-give-mt{
 	margin-top: 26px !important;
 }
+
+.coupon-panel-customer-container{
+	padding-top: 15px !important;
+	padding-left: 30px !important;
+	padding-right: 30px !important;
+	padding-bottom: 15px !important;
+    background-color: rgba(0,0,0,0.3) !important;
+	margin-top: 20px !important;
+	margin-bottom: 10px !important;
+    width: 60%;
+    margin-left: 20% !important;
+	border-radius: 20px 20px 20px 20px !important;
+	-webkit-border-radius: 20px 20px 20px 20px !important;
+
+}

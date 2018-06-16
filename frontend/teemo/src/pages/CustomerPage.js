@@ -119,7 +119,7 @@ class CustomerPage extends Component {
 
 
 								<Accordion.Content className="coupon-panel-customer-mt" active={this.state.activeIndex === cplist.coupon.id}>
-					<div className="coupon-panel-store-container">
+					<div className="coupon-panel-customer-container">
 					<Segment attached className="coupon-panel-store-panel">
 					
 									<CouponPanel hover="false" stampCount={cplist.coupon.stamp_count} onClickStamp={err => err}/>
@@ -133,7 +133,7 @@ class CustomerPage extends Component {
 												</Grid.Column>
 												<Grid.Column>
 													<Form.Field>
-														<Form.Input className='customer-font' type="text" onChange = {this.captureGiveCount} value={this.state.giveCount} label="Count" placeholder="0 ~ your stamps"/>
+														<Form.Input className='customer-font' type="text" onChange = {this.captureGiveCount} value={this.state.giveCount} label="Count" placeholder="1 ~ your stamps"/>
 													</Form.Field>
 												</Grid.Column>
 												<Grid.Column>
@@ -161,26 +161,18 @@ class CustomerPage extends Component {
 	onSubmitGive = (event) => {
 		event.preventDefault();
 		const { targetUserPhoneNumber, giveCount, targetCouponID } = this.state;
-		console.log('***************************8');
-		console.log(targetUserPhoneNumber, giveCount, targetCouponID);
-		console.log('***************************8');
 		giveCoupon(targetUserPhoneNumber, giveCount, targetCouponID)
 			.then(({ err, response }) => {
 				if (err) {
-					console.log('errrrrrrrrrrrrrrrr');
-					console.log(err);
+					alert(`Giving coupon error: ${err.response.data.msg}`);
 					return;
 				}
-				console.log('successssssssssssssss');
-				console.log(response);
-
 
 				alert(`Give [couponID: ${targetCouponID}] [to: ${targetUserPhoneNumber}] [count: ${giveCount}] success`);
 				// success
 				this.setState({
 					targetUserPhoneNumber: '',
 					giveCount: '',
-					targetCouponID: '',
 				});
 				// get my coupon list again
 				getCouponList()
