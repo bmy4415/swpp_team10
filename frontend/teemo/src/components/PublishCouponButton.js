@@ -24,7 +24,7 @@ class PublishCouponButton extends Component {
 				response.json().then((array)=>{
 					// cause a customer have only one coupon published by the store, searchResult have only one element.
 					let searchResult = array.find((cursor)=>{
-						return cursor.customer.account === this.props.statefunction.queryCustomerAccount;
+						return cursor.customer.account === this.props.statefunction.queryCustomerAccount || cursor.customer.phone_number === this.props.statefunction.queryCustomerAccount;
 					})
 					if(searchResult === undefined)
 					{
@@ -36,7 +36,7 @@ class PublishCouponButton extends Component {
 					}
 					else
 					{
-						this.props.onSetSearchResult(searchResult.coupon.id, undefined, searchResult.coupon.stamp_count)
+						this.props.onSetSearchResult(searchResult.coupon.id, this.props.statefunction.queryCustomerAccount, searchResult.coupon.stamp_count)
 					}
 				})
 			}
@@ -84,10 +84,10 @@ class PublishCouponButton extends Component {
 	render() {
 		return (
 			<div className="PublishCouponButton">
-				<Button onClick={this.onClickPublishCoupon}>
+				<Button inverted onClick={this.onClickPublishCoupon}>
 					Publish Coupon
 				</Button>
-				<h2> {this.state.message} </h2>
+				<h2 className="font-white"> {this.state.message} </h2>
 			</div>
 		);
 	}

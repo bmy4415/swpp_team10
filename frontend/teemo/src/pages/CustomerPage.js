@@ -79,17 +79,26 @@ class CustomerPage extends Component {
 		 //console.log(this.state.couponList);
 		return (
 			<div className="CustomerPage">
-    <Menu size="small" fixed='top' inverted>
-        <Menu.Item as='p' header>
+ <div>
+    <Menu borderless size="small" fixed='top' inverted>
+        <Menu.Item className="font-14" header>
           티끌모아
         </Menu.Item>
 		<Menu.Menu position="right">
-			<Menu.Item as='p'>
+			<Menu.Item>
+				Hi &nbsp; {this.props.statefunction.id}
+			</Menu.Item>
+			<Menu.Item>
 				<LogoutButton/>	
 			</Menu.Item>
 		</Menu.Menu>	
     </Menu>
-			<br/>
+  </div>
+
+		<br/>
+		<br/>
+		<br/>
+		<br/>
 
 			<Container textAlign='left'>
 			<Grid>
