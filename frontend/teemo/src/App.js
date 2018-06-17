@@ -10,6 +10,10 @@ import StorePage from './containers/StorePage.js';
 
 class App extends Component {
 
+  componentDidMount() {
+      document.title = 'Teemo'
+  }
+
   render() {
 	  const Routing = () => (
 		<div className="App">
